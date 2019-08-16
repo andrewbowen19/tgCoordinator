@@ -37,30 +37,59 @@ GuideFeedback = feedback.loc[names == guideName]#grabbing df with only one guide
 indGuideFeedback = GuideFeedback.drop(labels =['Timestamp','Visitor Name', 'Visitor Email', 'Visitor Type', 'Visit Date'], axis=1)#Don't need visitor info in guide files (privacy reasons)
 
 # replacing spaces for file name cleanliness
-guideName = guideName.replace(' ', '_')
+# guideName = guideName.replace(' ', '_')
 
 # Setting up individual files for each guide
 newpath = '/Users/andrewbowen/tgCoordinator/indFiles/'
-guideFile = indGuideFeedback.to_csv(newpath + f'{guideName}_feedback.csv')
+guideFile = indGuideFeedback.to_csv(newpath + guideName.replace(' ', '_') +'_feedback.csv')
 
-
-
+# List of guide names eventually to loop through, will make files for each one
+# GuideList = []
 
 # ##################################################### Visualization ######################################################
 
 # Can create histograms of scores if we want to analyze the data
 
 # Experience score
-# f,ax = plt.subplots(figsize = (8,5))
-# ax.hist(expScore, bins = 5, color = '#4E2A84')#histogram with Northwestern purple Go 'Cats
-# ax.set_title('Visitors\' experience scores')
+f,ax = plt.subplots(figsize = (8,5))
+ax.hist(expScore, bins = 5, color = '#4E2A84')#histogram with Northwestern purple Go 'Cats
+ax.set_xlabel('Visitors\' experience scores')
+ax.set_title(guideName)
 
-# # Route Score
-# f,ax = plt.subplots(figsize = (8,5))
-# ax.hist(routeScore, bins = 5, color = '#4E2A84')
-# ax.set_title('Visitors\' experience scores')
+# Route Score
+f,ax = plt.subplots(figsize = (8,5))
+ax.hist(routeScore, bins = 5, color = '#4E2A84')
+ax.set_xlabel('Visitors\' Route Scores')
+ax.set_title(guideName)
 
-# # Guide Score
-# f,ax = plt.subplots(figsize = (8,5))
-# ax.hist(guideScore, bins = 5, color = '#4E2A84')
-# ax.set_title('Visitors\' experience scores')
+# Guide Score
+f,ax = plt.subplots(figsize = (8,5))
+ax.hist(guideScore, bins = 5, color = '#4E2A84')
+ax.set_xlabel('Guide Score Scores')
+ax.set_title(guideName)
+
+# ######### Scatter plots to see score correlations ###########
+
+# Guide Score - Exp Score
+f,ax = plt.subplots(figsize = (8,5))
+ax.scatter(guideScore, expScore, color = '#4E2A84')
+ax.set_xlabel('Guide Score')
+ax.set_ylabel('Experience Score')
+ax.set_title(guideName)
+
+# route Score - Exp Score
+f,ax = plt.subplots(figsize = (8,5))
+ax.scatter(routeScore, expScore, color = '#4E2A84')
+ax.set_xlabel('Route Score')
+ax.set_ylabel('Experience Score')
+ax.set_title(guideName)
+
+plt.show()
+
+
+
+
+
+
+
+

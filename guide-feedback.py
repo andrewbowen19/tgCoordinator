@@ -33,8 +33,11 @@ names = feedback['Guide Name']
 
 # Want to be able to type in guide's name, pull out the correct data frame, and write that to a file
 guideName = input('Guide Name: ')
-indGuideFeedback = feedback.loc[names == guideName]
-guideName = guideName.replace(' ', '_')#replacing spaces for file name cleanliness
+GuideFeedback = feedback.loc[names == guideName]#grabbing df with only one guide's feedback - eventually we can loop through all the guides
+indGuideFeedback = GuideFeedback.drop(labels =['Timestamp','Visitor Name', 'Visitor Email', 'Visitor Type', 'Visit Date'], axis=1)#Don't need visitor info in guide files (privacy reasons)
+
+# replacing spaces for file name cleanliness
+guideName = guideName.replace(' ', '_')
 
 # Setting up individual files for each guide
 newpath = '/Users/andrewbowen/tgCoordinator/indFiles/'
@@ -45,7 +48,7 @@ guideFile = indGuideFeedback.to_csv(newpath + f'{guideName}_feedback.csv')
 
 # ##################################################### Visualization ######################################################
 
-# Can create histograms of scores if we want
+# Can create histograms of scores if we want to analyze the data
 
 # Experience score
 # f,ax = plt.subplots(figsize = (8,5))

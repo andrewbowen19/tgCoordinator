@@ -31,33 +31,90 @@ routeScore = feedback['Route Score']
 
 names = feedback['Guide Name']
 
-# Want to be able to type in guide's name, pull out the correct data frame, and write that to a file
-guideName = input('Guide Name: ')
-GuideFeedback = feedback.loc[names == guideName]#grabbing df with only one guide's feedback - eventually we can loop through all the guides
-indGuideFeedback = GuideFeedback.drop(labels =['Timestamp','Visitor Name', \
-	'Visitor Email', 'Visitor Type', 'Visit Date'], axis=1)#Don't need visitor info in guide files (privacy reasons)
 
-# replacing spaces for file name cleanliness
-# guideName = guideName.replace(' ', '_')
+# ########################################## OLD --This is contained within our functions now #######################################################
+																																					#
+																																					#
+																																					#
+# # Want to be able to type in guide's name, pull out the correct data frame, and write that to a files 											#	
+# guideName = input('Guide Name: ')																													#
+# GuideFeedback = feedback.loc[names == guideName]#grabbing df with only one guide's feedback - eventually we can loop through all the Guides 		#
+# indGuideFeedback = GuideFeedback.drop(labels =['Timestamp','Visitor Name', \																		#
+# 	'Visitor Email'], axis=1)#Don't need visitor personal info in guide files (privacy reasons)														#
+																																					#
+# # replacing spaces for file name cleanliness																										#
+# # guideName = guideName.replace(' ', '_')																											#
+																																					#
+# # Setting up individual files for each guide 																										#
+# guideFile = indGuideFeedback.to_csv(newpath + guideName.replace(' ', '_') +'_feedback.csv')														#
+																																					#
+# ###################################################################################################################################################
 
-# Setting up individual files for each guide
-newpath = '/Users/andrewbowen/tgCoordinator/indFiles/'
-guideFile = indGuideFeedback.to_csv(newpath + guideName.replace(' ', '_') +'_feedback.csv')
 
-# List of guide names eventually to loop through, will make files for each one
-# GuideList = [#FILL WITH GUIDE NAMES] - could read in from separate file
-
+newpath = '/Users/andrewbowen/tgCoordinator/indFiles/'#Path for individual guide files
+# List of all guides --  need to input list of guide names (maybe we can just import it from a csv)
 GuideList = ['Lauren Gold', 'Emily Coffee', 'Andrew Bowen', 'Mia Lennon']
 
+# ############################################## All-guide functions ###################################################
 
-# ##############################################Functions to apply to every guide ##################################
+def makePlots(DataFrame):
+	'''Function to make plots for statistics of all guides together,
+	 takes in our feedback DF as an input and should generate plots of the same form as the individual guide plots'''
+	feedback = DataFrame
+	expScore = feedback['Exp Score']
+	guideScore = feedback['Guide Score']
+	routeScore = feedback['Route Score']
+
+	# Experience score
+	f,ax = plt.subplots(figsize = (8,5))
+	ax.hist(expScore, bins = 5, color = '#4E2A84')#histogram with Northwestern purple Go 'Cats
+	ax.set_xlabel('Visitors\' experience scores')
+	ax.set_title('All Tour Guides')
+
+	# Route Score
+	f,ax = plt.subplots(figsize = (8,5))
+	ax.hist(routeScore, bins = 5, color = '#4E2A84')
+	ax.set_xlabel('Visitors\' Route Scores')
+	ax.set_title('All Tour Guides')
+
+	# Guide Score
+	f,ax = plt.subplots(figsize = (8,5))
+	ax.hist(guideScore, bins = 5, color = '#4E2A84')
+	ax.set_xlabel('Guide Score Scores')
+	ax.set_title('All Tour Guides')
+
+	# ######### Scatter plots to see score correlations ###########
+
+	# Guide Score - Exp Score
+	f,ax = plt.subplots(figsize = (8,5))
+	ax.scatter(guideScore, expScore, color = '#4E2A84')
+	ax.set_xlabel('Guide Score')
+	ax.set_ylabel('Experience Score')
+	ax.set_title('All Tour Guides')
+
+	# route Score - Exp Score
+	f,ax = plt.subplots(figsize = (8,5))
+	ax.scatter(routeScore, expScore, color = '#4E2A84')
+	ax.set_xlabel('Route Score')
+	ax.set_ylabel('Experience Score')
+	ax.set_title('All Tour Guides')
+
+	plt.show()
+
+
+
+
+
+
+
+# ############################################## Individual Guide functions ##################################
 
 # Function to make individual guide file
 def makeGuideFile(guideName):
 	'''Fucntion to create personal .csv files for each guide'''
 	guideFeedback = feedback.loc[names == guideName]
 	indGuideFeedback = guideFeedback.drop(labels =['Timestamp','Visitor Name', \
-		'Visitor Email', 'Visitor Type', 'Visit Date'], axis=1)#Don't need visitor info in guide files (privacy reasons)
+		'Visitor Email'], axis=1)#Don't need visitor info in guide files (privacy reasons)
 	# Writing guide data to file
 	guideFile = indGuideFeedback.to_csv(newpath + guideName.replace(' ', '_') +'_feedback.csv')
 
@@ -118,16 +175,25 @@ def makeGuidePlots(guideName):
 	plt.show()
 
 
+# ############################################## Interactive Part ######################################################
 
-# If inputted guide name is in list
-if guideName in GuideList:
-	makeGuideFile(guideName)
-	makeGuidePlots(guideName)
+query = input('Would you like to see all-guide feedback or individual guide feedback?:(all/ind) ')
+
+if query == 'all':
+	makePlots(feedback)
+	# print('Data table for all guides: ',feedback)
+
+elif query == 'ind':
+	guideName = input('Guide Name: ')
+
+	if guideName in GuideList:
+		makeGuideFile(guideName)
+		makeGuidePlots(guideName)
 
 else:
 	print('Name not in our guide list, please double check spelling.')
 
-	# Function should write the files automatically
+	# Function should write the files automatically - it doe
 
 
 # ##################################################### Visualization ######################################################

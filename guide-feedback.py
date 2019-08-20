@@ -265,48 +265,6 @@ elif query == 'ind'or query == 'IND' or query == 'Ind' or query == 'Individual':
 
 # ##################################################### Visualization ######################################################
 
-# ################### Interactive Plots test #########################
-# https://mpld3.github.io/examples/scatter_tooltip.html
-import mpld3
-
-
-
-Names = feedback['Guide Name']
-guideScore = feedback['Guide Score']
-routeScore = feedback['Route Score']
-expScore = feedback['Exp Score']
-
-# Guide Score - Exp Score
-f,ax = plt.subplots(figsize = (8,5))
-scat = ax.scatter(guideScore, expScore, color = '#4E2A84')
-ax.set_xlim((0,6))
-ax.set_ylim((0,6))
-ax.set_xlabel('Guide Score')
-ax.set_ylabel('Experience Score')
-ax.set_title('All Tour Guides')
-
-# Interactive hovers
-labels = [Names.values]
-tooltip = mpld3.plugins.PointLabelTooltip(scat, labels=labels)
-mpld3.plugins.connect(f, tooltip)
-mpld3.show()
-
-# route Score - Exp Score
-f,ax = plt.subplots(figsize = (8,5))
-scat = ax.scatter(routeScore, expScore, color = '#4E2A84')
-ax.set_xlim((0,6))
-ax.set_ylim((0,6))
-ax.set_xlabel('Route Score')
-ax.set_ylabel('Experience Score')
-ax.set_title('All Tour Guides')
-
-# Interactive hovers
-labels = [Names.values]
-tooltip = mpld3.plugins.PointLabelTooltip(scat, labels=labels)
-mpld3.plugins.connect(f, tooltip)
-
-# plt.show()
-mpld3.show()
 
 
 

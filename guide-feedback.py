@@ -192,6 +192,7 @@ def makeGuidePlots(guideName):
 # ############################################## Name Search Function ##################################################
 
 # Function for us to do a name search, should be easier to keep running
+rawNames = feedback['Guide Name']
 
 def NameSearch():
 	# Input from the user to search for an individual guide
@@ -241,12 +242,13 @@ elif query == 'ind'or query == 'IND' or query == 'Ind' or query == 'Individual':
 	guideName = input('Guide Name: ')
 
 	# run NameSearch here - should replace everything below
+	# NameSearch()
 
 	if guideName in GuideList:
 		makeGuideFile(guideName)
 		# 
 
-		plotsQuery = input('Would you like to see graphs of this guide\'s responses? (yes/no): ')
+		plotsQuery = input('Would you like to see graphs of this guide\'s scores? (yes/no): ')
 		if plotsQuery == 'yes' or plotsQuery == 'y':
 			makeGuidePlots(guideName)
 

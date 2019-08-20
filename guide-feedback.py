@@ -129,6 +129,7 @@ def makeGuideFile(guideName):
 	# Writing guide data to file
 	guideFile = indGuideFeedback.to_csv(indpath + guideName.replace(' ', '_') +'_feedback.csv')
 
+purpleNU = '#4E2A84'
 
 # function make guide plots
 def makeGuidePlots(guideName):
@@ -144,7 +145,7 @@ def makeGuidePlots(guideName):
 	# Plotting
 	# Experience score
 	f,ax = plt.subplots(figsize = (8,5))
-	ax.hist(indExpScore, bins = 5, color = '#4E2A84')#histogram with Northwestern purple Go 'Cats
+	ax.hist(indExpScore, bins = 5, color = purpleNU)#histogram with Northwestern purple Go 'Cats
 	ax.set_xlim((0,6))
 	ax.set_ylim((0,6))
 	ax.set_xlabel('Visitors\' experience scores')
@@ -152,7 +153,7 @@ def makeGuidePlots(guideName):
 
 	# Route Score
 	f,ax = plt.subplots(figsize = (8,5))
-	ax.hist(indRouteScore, bins = 5, color = '#4E2A84')
+	ax.hist(indRouteScore, bins = 5, color = purpleNU)
 	ax.set_xlim((0,6))
 	ax.set_ylim((0,6))
 	ax.set_xlabel('Visitors\' Route Scores')
@@ -160,7 +161,7 @@ def makeGuidePlots(guideName):
 
 	# Guide Score
 	f,ax = plt.subplots(figsize = (8,5))
-	ax.hist(indGuideScore, bins = 5, color = '#4E2A84')
+	ax.hist(indGuideScore, bins = 5, color = purpleNU)
 	ax.set_xlim((0,6))
 	ax.set_ylim((0,6))
 	ax.set_xlabel('Guide Score Scores')
@@ -170,7 +171,7 @@ def makeGuidePlots(guideName):
 
 	# Guide Score - Exp Score
 	f,ax = plt.subplots(figsize = (8,5))
-	ax.scatter(indGuideScore, indExpScore, color = '#4E2A84')
+	ax.scatter(indGuideScore, indExpScore, color = purpleNU)
 	ax.set_xlim((0,6))
 	ax.set_ylim((0,6))
 	ax.set_xlabel('Guide Score')
@@ -179,7 +180,7 @@ def makeGuidePlots(guideName):
 
 	# route Score - Exp Score
 	f,ax = plt.subplots(figsize = (8,5))
-	ax.scatter(indRouteScore, indExpScore, color = '#4E2A84')
+	ax.scatter(indRouteScore, indExpScore, color = purpleNU)
 	ax.set_xlim(0,6)
 	ax.set_ylim((0,6))
 	ax.set_xlabel('Route Score')
@@ -187,6 +188,45 @@ def makeGuidePlots(guideName):
 	ax.set_title(guideName)
 
 	plt.show()
+
+# ############################################## Name Search Function ##################################################
+
+# Function for us to do a name search, should be easier to keep running
+
+def NameSearch():
+	# Input from the user to search for an individual guide
+	searchName = input('Guide Name: ')
+
+	# Best case scenario -name matches list exactly
+	if searchName in list(rawNames):
+		makeGudieFile(searchName)
+		makeGuidePlots(searchName)
+		print('Guide  selected!')
+		# make files/plots as needed (can insert into our other code guide-feedback)
+
+	# Capitalization errors - turn everything uppercase as a c
+	elif searchName.upper() in [x.upper() for x in list(rawNames)]:
+		print('That guide is in our database!')
+		makeGudieFile(searchName.capitalize())#making files/plots with capitalized guide name from input
+		makeGuidePlots(searchName.capitalize())
+		# Make files/plots for that individual guide's name
+
+
+	# Only first name
+	elif any(searchName in x for x in list(rawNames)):#If the query name is contained in the rawNames list (only search with a first name)
+		# There are more than one Andrew
+		
+
+		print('Searching...')
+
+	# Bad guide name
+	else:
+		print('That guide is not in our database.')
+
+		newSearch = input(' Would you like to try again? (yes/no):')
+
+		# if newSearch == 'y' or newSearch == 'yes':
+	return None
 
 
 # ############################################## Interactive Part ######################################################
@@ -200,8 +240,11 @@ if query == 'all' or query == 'ALL' or query == 'All':
 elif query == 'ind'or query == 'IND' or query == 'Ind' or query == 'Individual':
 	guideName = input('Guide Name: ')
 
+	# run NameSearch here - should replace everything below
+
 	if guideName in GuideList:
 		makeGuideFile(guideName)
+		# 
 
 		plotsQuery = input('Would you like to see graphs of this guide\'s responses? (yes/no): ')
 		if plotsQuery == 'yes' or plotsQuery == 'y':
@@ -222,44 +265,48 @@ elif query == 'ind'or query == 'IND' or query == 'Ind' or query == 'Individual':
 
 # ##################################################### Visualization ######################################################
 
-# Can create histograms of scores if we want to analyze the data
-# Example below is a test case for one guide (not from 'if' statement)
+# ################### Interactive Plots test #########################
+# https://mpld3.github.io/examples/scatter_tooltip.html
+import mpld3
 
-# Experience score
-# f,ax = plt.subplots(figsize = (8,5))
-# ax.hist(expScore, bins = 5, color = '#4E2A84')#histogram with Northwestern purple Go 'Cats
-# ax.set_xlabel('Visitors\' experience scores')
-# ax.set_title(guideName)
 
-# # Route Score
-# f,ax = plt.subplots(figsize = (8,5))
-# ax.hist(routeScore, bins = 5, color = '#4E2A84')
-# ax.set_xlabel('Visitors\' Route Scores')
-# ax.set_title(guideName)
 
-# # Guide Score
-# f,ax = plt.subplots(figsize = (8,5))
-# ax.hist(guideScore, bins = 5, color = '#4E2A84')
-# ax.set_xlabel('Guide Score Scores')
-# ax.set_title(guideName)
+Names = feedback['Guide Name']
+guideScore = feedback['Guide Score']
+routeScore = feedback['Route Score']
+expScore = feedback['Exp Score']
 
-# # ######### Scatter plots to see score correlations ###########
+# Guide Score - Exp Score
+f,ax = plt.subplots(figsize = (8,5))
+scat = ax.scatter(guideScore, expScore, color = '#4E2A84')
+ax.set_xlim((0,6))
+ax.set_ylim((0,6))
+ax.set_xlabel('Guide Score')
+ax.set_ylabel('Experience Score')
+ax.set_title('All Tour Guides')
 
-# # Guide Score - Exp Score
-# f,ax = plt.subplots(figsize = (8,5))
-# ax.scatter(guideScore, expScore, color = '#4E2A84')
-# ax.set_xlabel('Guide Score')
-# ax.set_ylabel('Experience Score')
-# ax.set_title(guideName)
+# Interactive hovers
+labels = [Names.values]
+tooltip = mpld3.plugins.PointLabelTooltip(scat, labels=labels)
+mpld3.plugins.connect(f, tooltip)
+mpld3.show()
 
-# # route Score - Exp Score
-# f,ax = plt.subplots(figsize = (8,5))
-# ax.scatter(routeScore, expScore, color = '#4E2A84')
-# ax.set_xlabel('Route Score')
-# ax.set_ylabel('Experience Score')
-# ax.set_title(guideName)
+# route Score - Exp Score
+f,ax = plt.subplots(figsize = (8,5))
+scat = ax.scatter(routeScore, expScore, color = '#4E2A84')
+ax.set_xlim((0,6))
+ax.set_ylim((0,6))
+ax.set_xlabel('Route Score')
+ax.set_ylabel('Experience Score')
+ax.set_title('All Tour Guides')
+
+# Interactive hovers
+labels = [Names.values]
+tooltip = mpld3.plugins.PointLabelTooltip(scat, labels=labels)
+mpld3.plugins.connect(f, tooltip)
 
 # plt.show()
+mpld3.show()
 
 
 

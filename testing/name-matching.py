@@ -62,94 +62,97 @@ def randomScat():
 
 # Function for us to do a name search, should be easier to keep running
 
-def NameSearch():
-	'''
-	Function for us to integrate with our guide-feedback script, looks to aid in name matching for user 
-	and correct for spelling errors in database, because parents will often give incomplete/oncorrectly spelled names
-	'''
+# def NameSearch():
+# 	'''
+# 	Function for us to integrate with our guide-feedback script, looks to aid in name matching for user 
+# 	and correct for spelling errors in database, because parents will often give incomplete/oncorrectly spelled names
+# 	'''
 
 
-	tryAgain = True
+# 	tryAgain = True
 
-	def goodNames(name):
-		"""Nested fucntion to check for good names in dataframe, 
-		if the names aren't present/spelled correclty, passed to retry function"""
+# 	def goodNames(name):
+# 		"""Nested fucntion to check for good names in dataframe, 
+# 		if the names aren't present/spelled correclty, passed to retry function"""
 	
-		# Best case scenario
-		if name in list(rawNames):
-			print('Found them!')
-			# make files/plots as needed (can insert into our other code guide-feedback)
-			randomScat()
-			return True
-
-		# Capitalization errors - turn everything uppercase as a c
-		elif name.upper() in [x.upper() for x in list(rawNames)]:
-			print('Got \'em!')
-			# Make files/plots for that individual guide's name
-			randomScat()
-			return True
+# 		# Best case scenario
+# 		if name in list(rawNames):
+# 			print('Found them!')
+# 			# make files/plots as needed (can insert into our other code guide-feedback)
+# 			randomScat()
+# 			return True
 
 
-		# Only first name
-		elif any(name in x for x in list(rawNames)):#If the query name is contained in the rawNames list (only search with a first name)
-			# There are more than one Andrew
-			print(any(name in x for x in list(rawNames)))
-
-			print('Oooh thats a toughy')
-			randomScat()
-			return True
-
-		# Bad name searched with
-		else:
-			return False
-
-	def doItAgain():
-		'''Function for us to call if goodNames fails (name not listed), 
-		checks if user wants to search again, if they do, runs goodNames again. If not, kills the application'''
-
-		################ This section not working
-		newSearch = input('Would you like to try again? (yes/no): ')
-
-		if newSearch == 'yes' or newSearch == 'y':
-			newName = input('Guide Name: ')
-			goodNames(newName)
-			return True
-
-		if newSearch == 'no' or newSearch == 'n' or newSearch == 'No' or newSearch == 'NO':
-			return False
-
-	searchName = input('Which guide\'s feedback would you like to analyze?: ')		
-	# search = goodNames(searchName)
+# 		# Capitalization errors - turn everything uppercase as a c
+# 		elif name.upper() in [x.upper() for x in list(rawNames)]:
+# 			print('Got \'em!')
+# 			# Make files/plots for that individual guide's name
+# 			randomScat()
+# 			return True
 
 
+# 		# Only first name used in search
+# 		elif any(name in x for x in list(rawNames)):
+
+# 			# print(any(name in x for x in list(rawNames)))
+
+# 			print('Oooh thats a toughy')
+# 			# Make files/plots here
+# 			randomScat()
+# 			return True
+
+# 		# Bad name searched with
+# 		else:
+# 			return False
+
+# 	def doItAgain():
+# 		'''Function for us to call if goodNames fails (name not listed), 
+# 		checks if user wants to search again, if they do, runs goodNames again. If not, kills the application'''
+
+# 		################ This section not working
+# 		newSearch = input('Would you like to try again? (yes/no): ')
+
+# 		if newSearch == 'yes' or newSearch == 'y':
+# 			newName = input('Guide Name: ')
+# 			goodNames(newName)
+# 			return True
+
+# 		elif newSearch == 'no' or newSearch == 'n' or newSearch == 'No' or newSearch == 'NO':
+# 			return False
+
+# 	searchName = input('Which guide\'s feedback would you like to analyze?: ')		
+# 	# search = goodNames(searchName)
 
 
-	# # While loop to keep program running until user quits
-	while tryAgain == True:
-		search = goodNames(searchName)#running search for good user input names
 
-		# If name was successfully recovered
-		if search == True:
-			SearchAgain = input('Would you like to analyze the feedback for another guide? (yes/no): ')
 
-			if SearchAgain == 'yes' or SearchAgain == 'y':
-				newName = input('Guide Name: ')
-				goodNames(newName)
+# 	# # While loop to keep program running until user quits
+# 	while tryAgain == True:
+# 		search = goodNames(searchName)#running search for good user input names
+
+# 		# If name was successfully recovered
+# 		if search == True:
+# 			SearchAgain = input('Would you like to analyze the feedback for another guide? (yes/no): ')
+
+# 			if SearchAgain == 'yes' or SearchAgain == 'y':
+# 				newName = input('Guide Name: ')
+# 				goodNames(newName)
 	
 
-			#User doesn't want to keep searching, kills application 
-			elif SearchAgain == 'no' or SearchAgain == 'n':
-				tryAgain = False
+# 			#User doesn't want to keep searching, kills application 
+# 			elif SearchAgain == 'no' or SearchAgain == 'n':
+# 				tryAgain = False
 
 
-		# If second search is bad, try again (unless they don't want to)
-		elif search == False:
-			print('That guide is not in out database. foo foo')
-			again = doItAgain()	
+# 		# If second search is bad, try again (unless they don't want to)
+# 		elif search == False:
+# 			print('That guide is not in out database. foo foo')
+# 			again = doItAgain()	
 
-			# Kills app
-			if again == False:
-				tryAgain = False
+# 			# Kills app
+# 			if again == False:
+# 				tryAgain = False
+# 	return None
 
 
 
@@ -157,6 +160,99 @@ def NameSearch():
 # Almost ready to integrate with guide-feedback script ---- needs some user debugging!!!
 
 
-CoordQuery = NameSearch()
+# CoordQuery = NameSearch()
+
+# #########################################
+
+def goodNames(name):
+	"""fucntion to check for good names in dataframe, 
+	if the names aren't present/spelled correclty, passed to retry function"""
+	
+	# Best case scenario
+	if name in list(rawNames):
+		print('Found them!')
+		# make files/plots as needed (can insert into our other code guide-feedback)
+		randomScat()
+		return True
+
+
+	# Capitalization errors - turn everything uppercase as a c
+	elif name.upper() in [x.upper() for x in list(rawNames)]:
+		print('Got \'em!')
+		# Make files/plots for that individual guide's name
+		randomScat()
+		return True
+
+
+	# Only first name used in search
+	elif any(name in x for x in list(rawNames)):
+
+		print('Oooh thats a toughy')
+		# Make files/plots here
+		randomScat()
+		return True
+
+	# Bad name searched with
+	else:
+		return False
+
+
+# ############################## Run again function -- do not use!!!! ############################################
+# def doItAgain():
+# 	'''Function for us to call if goodNames fails (name not listed), 
+# 	checks if user wants to search again, if they do, runs goodNames again. If not, kills the application'''
+
+# 	################ This section not working
+# 	newSearch = input('Would you like to try again? (yes/no): ')
+
+# 	if newSearch == 'yes' or newSearch == 'y':
+# 		newName = input('Guide Name: ')
+# 		goodNames(newName)
+# 		return True
+
+# 	elif newSearch == 'no' or newSearch == 'n' or newSearch == 'No' or newSearch == 'NO':
+		# return False
+
+#While loop to keep application running until user quits
+tryAgain = True
+	
+while tryAgain == True:
+	guideName = input('Which guide\'s feedback would you like to analyze?: ')
+	search = goodNames(guideName)
+
+	# If output of goodnames function is True
+	if search == True:
+		newSearch = input('Would you like to analyze the feedback of another guide? (y/n): ')
+
+		# User wants to search more guides
+		if newSearch == 'y' or newSearch == 'yes':
+			tryAgain = True
+
+		# Kills app
+		elif newSearch == 'n' or newSearch == 'no':
+			tryAgain = False
+
+	# User searched a bad name - misspelled or otherwise
+	elif search == False:
+		print('That guide is not in our database.')
+
+		# Asks to search again
+		newSearch = input('Would you like to analyze the feedback of another guide? (y/n): ')
+
+		# User can search more guides
+		if newSearch == 'y' or newSearch == 'yes':
+			tryAgain = True
+
+		# Kills app
+		elif newSearch == 'n' or newSearch == 'no':
+			tryAgain = False
+
+
+
+
+
+
+
+
 
 

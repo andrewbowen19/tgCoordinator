@@ -189,85 +189,78 @@ def makeGuidePlots(guideName):
 
 	plt.show()
 
-# ############################################## Name Search Function ##################################################
 
-# Function for us to do a name search, should be easier to keep running
-rawNames = feedback['Guide Name']
+# # ############################################## Interactive Part ######################################################
 
-def NameSearch():
-	# Input from the user to search for an individual guide
-	searchName = input('Guide Name: ')
+def NameSearch(name):
+	"""fucntion to check for good names in dataframe, 
+	if the names aren't present/spelled correclty, passed to retry function"""
+	
+	# Best case scenario
+	if name in list(names):
+		print('Found them!')
+		# functions from above:
+		makeGuidePlots(name)
 
-	# Best case scenario -name matches list exactly
-	if searchName in list(rawNames):
-		makeGudieFile(searchName)
-		makeGuidePlots(searchName)
-		print('Guide  selected!')
-		# make files/plots as needed (can insert into our other code guide-feedback)
+		return True
+
 
 	# Capitalization errors - turn everything uppercase as a c
-	elif searchName.upper() in [x.upper() for x in list(rawNames)]:
-		print('That guide is in our database!')
-		makeGudieFile(searchName.capitalize())#making files/plots with capitalized guide name from input
-		makeGuidePlots(searchName.capitalize())
-		# Make files/plots for that individual guide's name
+	elif name.upper() in [x.upper() for x in list(names)]:
+		print('Got \'em!')
+		# Make files/plots for that individual guide's name - functions in guide-feedback
+		makeGuidePlots(name)
+
+		return True
 
 
-	# Only first name
-	elif any(searchName in x for x in list(rawNames)):#If the query name is contained in the rawNames list (only search with a first name)
-		# There are more than one Andrew
-		
+	# Only first name used in search
+	elif any(name in x for x in list(names)):
 
-		print('Searching...')
+		print('Oooh thats a toughy')
+		# Make files/plots here - functions in guide-feedback
+		makeGuidePlots(name)
 
-	# Bad guide name
+		return True
+
+	# Bad name searched with
 	else:
+		return False
+
+
+#While loop to keep application running until user quits
+tryAgain = True
+	
+while tryAgain == True:
+	guideName = input('Which guide\'s feedback would you like to analyze?: ')
+	search = NameSearch(guideName)
+
+	# If output of goodnames function is True
+	if search == True:
+		newSearch = input('Would you like to analyze the feedback of another guide? (y/n): ')
+
+		# User wants to search more guides
+		if newSearch == 'y' or newSearch == 'yes':
+			tryAgain = True
+
+		# Kills app
+		elif newSearch == 'n' or newSearch == 'no':
+			tryAgain = False
+
+	# User searched a bad name - misspelled or otherwise
+	elif search == False:
 		print('That guide is not in our database.')
 
-		newSearch = input(' Would you like to try again? (yes/no):')
+		# Asks to search again
+		newSearch = input('Would you like to analyze the feedback of another guide? (y/n): ')
 
-		# if newSearch == 'y' or newSearch == 'yes':
-	return None
+		# User can search more guides
+		if newSearch == 'y' or newSearch == 'yes':
+			tryAgain = True
 
-
-# ############################################## Interactive Part ######################################################
-
-query = input('Would you like to see all-guide feedback or individual guide feedback?:(all/ind) ')
-
-if query == 'all' or query == 'ALL' or query == 'All':
-	makePlots(feedback)
-	# print('Data table for all guides: ',feedback)
-
-elif query == 'ind'or query == 'IND' or query == 'Ind' or query == 'Individual':
-	guideName = input('Guide Name: ')
-
-	# run NameSearch here - should replace everything below
-	# NameSearch()
-
-	if guideName in GuideList:
-		makeGuideFile(guideName)
-		# 
-
-		plotsQuery = input('Would you like to see graphs of this guide\'s scores? (yes/no): ')
-		if plotsQuery == 'yes' or plotsQuery == 'y':
-			makeGuidePlots(guideName)
-
-	# Want to check for lowercase/incomplete spellings with this condition
-	elif any(guideName in x for x in GuideList):
-
-		newGuideName = guideName.capitalize()
-		makeGuideFile(newGuideName)
-		makeGuidePlots(newGuideName)
-
-	else:
-		print('That name is not in our guide database, please double check spelling.')
-
-
-
-
-# ##################################################### Visualization ######################################################
-
-
+		# Kills app
+		elif newSearch == 'n' or newSearch == 'no':
+			tryAgain = False
 
 
 

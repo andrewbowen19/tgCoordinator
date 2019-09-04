@@ -233,10 +233,15 @@ tryAgain = True
 	
 while tryAgain == True:
 
+	# Checks for all or individual guide input
 	searchType = input('Would you like to analyze the feedback for all or individual guides? (all/ind): ')
+
+	# All guide input
 	if searchType == 'all' or searchType == 'All' or searchType == 'ALL':
 		makePlots(feedback)
-		tryAgain = False
+
+		# Kills application
+		tryAgain = True
 
 	elif searchType == 'ind' or searchType == 'IND' or searchType == 'Ind':
 

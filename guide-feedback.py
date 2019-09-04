@@ -232,35 +232,44 @@ def NameSearch(name):
 tryAgain = True
 	
 while tryAgain == True:
-	guideName = input('Which guide\'s feedback would you like to analyze?: ')
-	search = NameSearch(guideName)
 
-	# If output of goodnames function is True
-	if search == True:
-		newSearch = input('Would you like to analyze the feedback of another guide? (y/n): ')
+	searchType = input('Would you like to analyze the feedback for all or individual guides? (all/ind): ')
+	if searchType == 'all' or searchType == 'All' or searchType == 'ALL':
+		makePlots(feedback)
+		tryAgain = False
 
-		# User wants to search more guides
-		if newSearch == 'y' or newSearch == 'yes':
-			tryAgain = True
+	elif searchType == 'ind' or searchType == 'IND' or searchType == 'Ind':
 
-		# Kills app
-		elif newSearch == 'n' or newSearch == 'no':
-			tryAgain = False
 
-	# User searched a bad name - misspelled or otherwise
-	elif search == False:
-		print('That guide is not in our database.')
+		guideName = input('Which guide\'s feedback would you like to analyze?: ')
+		search = NameSearch(guideName)
 
-		# Asks to search again
-		newSearch = input('Would you like to analyze the feedback of another guide? (y/n): ')
+		# If output of goodnames function is True
+		if search == True:
+			newSearch = input('Would you like to analyze the feedback of another guide? (y/n): ')
 
-		# User can search more guides
-		if newSearch == 'y' or newSearch == 'yes':
-			tryAgain = True
+			# User wants to search more guides
+			if newSearch == 'y' or newSearch == 'yes':
+				tryAgain = True
 
-		# Kills app
-		elif newSearch == 'n' or newSearch == 'no':
-			tryAgain = False
+			# Kills app
+			elif newSearch == 'n' or newSearch == 'no':
+				tryAgain = False
+
+		# User searched a bad name - misspelled or otherwise
+		elif search == False:
+			print('That guide is not in our database.')
+
+			# Asks to search again
+			newSearch = input('Would you like to analyze the feedback of another guide? (y/n): ')
+
+			# User can search more guides
+			if newSearch == 'y' or newSearch == 'yes':
+				tryAgain = True
+
+			# Kills app
+			elif newSearch == 'n' or newSearch == 'no':
+				tryAgain = False
 
 
 

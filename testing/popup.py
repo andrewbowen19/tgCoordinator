@@ -2,6 +2,7 @@
 # Northwestern Univeristy Office of Undergraduate Admissions
 # 1841 Hinman Ave, Evanston, IL, 60201
 # Author: Andrew Bowen
+# License: MIT License
 
 '''
 Script to create popup window for our guide name-entry feedback system

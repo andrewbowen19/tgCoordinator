@@ -22,6 +22,7 @@ from kivy.uix.gridlayout import GridLayout
 from kivy.uix.label import Label
 from kivy.uix.textinput import TextInput
 
+text_input = TextInput(text = 'Guides Guides Guides!')
 
 # Reading in visitor feedback files (responses for every guide/tour)
 indpath = '/Users/andrewbowen/tgCoordinator/data/indFiles/'
@@ -41,11 +42,13 @@ class SearchScreen(GridLayout):
 
 		self.cols = 2
 		self.add_widget(Label(text='Guide First Name'))
-		self.firstname = TextInput(multiline=False)
+		self.firstname = TextInput(multiline=False, on_double_tap = True)
 		self.add_widget(self.firstname)
 		self.add_widget(Label(text='Guide Last Name'))
-		self.lastname = TextInput(password=True, multiline=False)
+		self.lastname = TextInput(multiline=False, on_double_tap = True)
 		self.add_widget(self.lastname)
+
+		print(self.firstname, self.lastname)
 
 
 # Runs search screen

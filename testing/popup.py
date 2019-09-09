@@ -20,6 +20,24 @@ import tkinter as tk
 # Ussing themed tkinter widgets (ttk) to create more modern-looking GUIs
 from tkinter.ttk import *
 
+# Reading in visitor feedback files (responses for every guide/tour)
+indpath = '/Users/andrewbowen/tgCoordinator/data/indFiles/'
+allpath = '/Users/andrewbowen/tgCoordinator/data/allFiles/'
+feedback = pd.read_csv(allpath + 'Feedback_Form_Beta.csv', sep = ',',header = 0)
+
+# Renaming the columns for easier readability
+feedback.columns = ['Timestamp','Visitor Name', 'Visitor Email', 'Visitor Type', 'Visit Date', 'Guide Name',\
+			'Exp Score', 'Route Score', 'Guide Score', 'Comments']
+
+# Scores for plotting later
+expScore = feedback['Exp Score']
+guideScore = feedback['Guide Score']
+routeScore = feedback['Route Score']
+
+names = feedback['Guide Name']
+
+# Color for plotting (NU hexcode)
+purpleNU = '#4E2A84'
 
 # ################################################### Writing this as a class ####################################
 
@@ -27,6 +45,67 @@ class Search(object):
 
 	def __init__(self):
 		self.name = None
+
+##### Plots function from guide-feedback #######
+	def makePlots(self):
+
+		'''Function to make plots for statistics of all guides together,
+		 takes in our feedback DF as an input and should generate plots of the same form as the individual guide plots'''
+
+		import matplotlib.pyplot as plt
+		expScore = feedback['Exp Score']
+		guideScore = feedback['Guide Score']
+		routeScore = feedback['Route Score']
+
+		# Experience score
+		f,ax = plt.subplots(figsize = (8,5))
+		ax.hist(expScore, bins = 5, color = '#4E2A84')#histogram with Northwestern purple Go 'Cats
+		ax.set_xlim((0,6))
+		ax.set_ylim((0,6))
+		ax.set_xlabel('Visitors\' experience scores')
+		ax.set_title('All Tour Guides')
+
+		# Route Score
+		f,ax = plt.subplots(figsize = (8,5))
+		ax.hist(routeScore, bins = 5, color = '#4E2A84')
+		ax.set_xlim((0,6))
+		ax.set_ylim((0,6))
+		ax.set_xlabel('Visitors\' Route Scores')
+		ax.set_title('All Tour Guides')
+
+		# Guide Score
+		f,ax = plt.subplots(figsize = (8,5))
+		ax.hist(guideScore, bins = 5, color = '#4E2A84')
+		ax.set_xlim((0,6))
+		ax.set_ylim((0,6))
+		ax.set_xlabel('Guide Scores')
+		ax.set_title('All Tour Guides')
+
+		# ######### Scatter plots to see score correlations ###########
+
+		# Guide Score - Exp Score
+		f,ax = plt.subplots(figsize = (8,5))
+		ax.scatter(guideScore, expScore, color = '#4E2A84')
+		ax.set_xlim((0,6))
+		ax.set_ylim((0,6))
+		ax.set_xlabel('Guide Score')
+		ax.set_ylabel('Experience Score')
+		ax.set_title('All Tour Guides')
+
+		# route Score - Exp Score
+		f,ax = plt.subplots(figsize = (8,5))
+		ax.scatter(routeScore, expScore, color = '#4E2A84')
+		ax.set_xlim((0,6))
+		ax.set_ylim((0,6))
+		ax.set_xlabel('Route Score')
+		ax.set_ylabel('Experience Score')
+		ax.set_title('All Tour Guides')
+
+		plt.show()
+
+	########################################
+
+
 
 	# This works
 	def guideSearch(self):
@@ -49,19 +128,79 @@ class Search(object):
 			"""Function to call for our buttons when a guide's name is searched"""
 
 			print("First Name: %s\nLast Name: %s" % (self.e1.get(), self.e2.get()))
+			# import matplotlib.pyplot as plt
+			# x = np.random.random(100)
+			# y = np.random.random(100)
+			# GuideName = self.e1.get() + ' ' + self.e2.get()
+			# f,ax = plt.subplots()
+			# ax.scatter(x,y)
+			# ax.set_title(GuideName)
+			# plt.show()
+
+		def makeGuidePlots():
+			"""Function to make individual guide plots (exp score, route score, guide score"""
 			import matplotlib.pyplot as plt
-			x = np.random.random(100)
-			y = np.random.random(100)
-			GuideName = self.e1.get() + ' ' + self.e2.get()
-			f,ax = plt.subplots()
-			ax.scatter(x,y)
-			ax.set_title(GuideName)
+
+			guideName = self.e1.get() + ' ' +  self.e2.get()
+			guideFeedback = feedback.loc[names == guideName]
+			indGuideFeedback = guideFeedback.drop(labels =['Timestamp','Visitor Name', \
+				'Visitor Email', 'Visitor Type', 'Visit Date'], axis=1)
+
+			indExpScore = indGuideFeedback['Exp Score']
+			indGuideScore = indGuideFeedback['Guide Score']
+			indRouteScore = indGuideFeedback['Route Score']
+
+			# Experience score
+			f,ax = plt.subplots(figsize = (8,5))
+			ax.hist(indExpScore, bins = 5, color = purpleNU)#histogram with Northwestern purple Go 'Cats
+			ax.set_xlim((0,6))
+			ax.set_ylim((0,6))
+			ax.set_xlabel('Visitors\' experience scores')
+			ax.set_title(guideName)
+
+			# Route Score
+			f,ax = plt.subplots(figsize = (8,5))
+			ax.hist(indRouteScore, bins = 5, color = purpleNU)
+			ax.set_xlim((0,6))
+			ax.set_ylim((0,6))
+			ax.set_xlabel('Visitors\' Route Scores')
+			ax.set_title(guideName)
+
+			# Guide Score
+			f,ax = plt.subplots(figsize = (8,5))
+			ax.hist(indGuideScore, bins = 5, color = purpleNU)
+			ax.set_xlim((0,6))
+			ax.set_ylim((0,6))
+			ax.set_xlabel('Guide Score Scores')
+			ax.set_title(guideName)
+
+			# ######### Scatter plots to see score correlations ###########
+
+			# Guide Score - Exp Score
+			f,ax = plt.subplots(figsize = (8,5))
+			ax.scatter(indGuideScore, indExpScore, color = purpleNU)
+			ax.set_xlim((0,6))
+			ax.set_ylim((0,6))
+			ax.set_xlabel('Guide Score')
+			ax.set_ylabel('Experience Score')
+			ax.set_title(guideName)
+
+			# route Score - Exp Score
+			f,ax = plt.subplots(figsize = (8,5))
+			ax.scatter(indRouteScore, indExpScore, color = purpleNU)
+			ax.set_xlim(0,6)
+			ax.set_ylim((0,6))
+			ax.set_xlabel('Route Score')
+			ax.set_ylabel('Experience Score')
+			ax.set_title(guideName)
+
 			plt.show()
 
+		# self.name = self.e1.get() + self.e2.get()
 
 		# Setting up input buttons on entry widget
 		tk.Button(self.master, text='Quit', command= self.master.quit).grid(row=3, column=0, sticky=tk.W, pady=4)
-		tk.Button(self.master, text='View Feedback', command = show_entry_fields).grid(row=3, column=1, sticky=tk.W, padx = 5,pady=5)
+		tk.Button(self.master, text='View Feedback', command = makeGuidePlots).grid(row=3, column=1, sticky=tk.W, padx = 5,pady=5)
 
 		# Runs individual search widget
 		# self.master.mainloop()
@@ -87,7 +226,7 @@ class Search(object):
 		self.master1 = tk.Tk()
 
 		tk.Label(self.master1, text = 'Individual Guide or All guide feedback?').grid(row=0)
-		tk.Button(self.master1, text = 'All', command = self.randomScat).grid(row=1, column=0, sticky=tk.W)#All guide scatter
+		tk.Button(self.master1, text = 'All', command = self.makePlots).grid(row=1, column=0, sticky=tk.W)#All guide scatter
 		tk.Button(self.master1, text = 'Individual', command = self.guideSearch).grid(row=1, column=1, sticky=tk.W, padx = 4,pady=4)#Individual Search
 		tk.Button(self.master1, text = 'Quit', command = self.master1.quit).grid(row=1, column=2, sticky=tk.W, padx = 4,pady=4)#Quit Button
 

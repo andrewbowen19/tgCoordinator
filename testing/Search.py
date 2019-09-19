@@ -23,7 +23,7 @@ from tkinter.ttk import *
 # Reading in visitor feedback files (responses for every guide/tour)
 indpath = '/Users/andrewbowen/tgCoordinator/data/indFiles/'
 allpath = '/Users/andrewbowen/tgCoordinator/data/allFiles/'
-feedback = pd.read_csv(allpath + 'Feedback_Form_Beta.csv', sep = ',',header = 0)
+feedback = pd.read_csv(allpath + 'Feedback_Form_Beta.csv', sep = ',', header = 0)
 
 # Renaming the columns for easier readability
 feedback.columns = ['Timestamp','Visitor Name', 'Visitor Email', 'Visitor Type', 'Visit Date', 'Guide Name',\
@@ -50,7 +50,11 @@ class Search(object):
 	def makePlots(self):
 
 		'''Function to make plots for statistics of all guides together,
-		 takes in our feedback DF as an input and should generate plots of the same form as the individual guide plots'''
+		 takes in our feedback DF as an input and should generate plots of the same form as the individual guide plots
+
+		Will not want to incorporate this for all guides (or maybe only a distilled version of it)
+		Guides should only be able to see their own feedback
+		 '''
 
 		import matplotlib.pyplot as plt
 		expScore = feedback['Exp Score']
@@ -103,12 +107,10 @@ class Search(object):
 
 		plt.show()
 
-	########################################
+	######################################## Individual Guides ##############################
 
-
-
-	# This works
 	def guideSearch(self):
+		"""Function for widget that searches for individual guide, called after searchType"""
 		self.master = tk.Tk()
 
 		tk.Label(self.master, text="First Name").grid(row=0)
@@ -128,17 +130,11 @@ class Search(object):
 			"""Function to call for our buttons when a guide's name is searched"""
 
 			print("First Name: %s\nLast Name: %s" % (self.e1.get(), self.e2.get()))
-			# import matplotlib.pyplot as plt
-			# x = np.random.random(100)
-			# y = np.random.random(100)
-			# GuideName = self.e1.get() + ' ' + self.e2.get()
-			# f,ax = plt.subplots()
-			# ax.scatter(x,y)
-			# ax.set_title(GuideName)
-			# plt.show()
+
 
 		def makeGuidePlots():
-			"""Function to make individual guide plots (exp score, route score, guide score"""
+			"""Function to make individual guide plots (exp score, route score, guide score
+				Copied from our guide-feedback script in parent repo"""
 			import matplotlib.pyplot as plt
 
 			guideName = self.e1.get() + ' ' +  self.e2.get()
@@ -196,27 +192,13 @@ class Search(object):
 
 			plt.show()
 
-		# self.name = self.e1.get() + self.e2.get()
-
 		# Setting up input buttons on entry widget
-		tk.Button(self.master, text='Quit', command= self.master.quit).grid(row=3, column=0, sticky=tk.W, pady=4)
-		tk.Button(self.master, text='View Feedback', command = makeGuidePlots).grid(row=3, column=1, sticky=tk.W, padx = 5,pady=5)
+		quitButton = tk.Button(self.master, text='Quit', command= self.master.quit).grid(row=3, column=0, sticky=tk.W, pady=4)#Quit button
+		backButton = tk.Button(self.master, text = 'Back', command = self.master.quit).grid(row=3, column =1, sticky=tk.W, padx = 5,pady=5)#Back button
+		plotsButton = tk.Button(self.master, text='View Feedback', command = makeGuidePlots).grid(row=3, column=1, sticky=tk.W, padx = 5,pady=5)#Plots button
 
-		# Runs individual search widget
-		# self.master.mainloop()
+		# Works for now, will need to add name spelling checks (or could clean that up before adding names to our db)
 
-
-	def randomScat(self):
-		"""Random scatter plot with title set to search type 
-		PLACEHOLDER FUNCTION TO BE REPLACED WITH FUCNTIONS FOR IND GUIDE PLOTS OR ALL GUIDE PLOTS
-		"""
-		import matplotlib.pyplot as plt
-		x = np.random.random(100)
-		y = np.random.random(100)
-		f,ax = plt.subplots()
-		ax.scatter(x,y)
-		ax.set_title('All Guides')
-		plt.show()
 
 	def searchType(self):
 		"""
@@ -225,10 +207,10 @@ class Search(object):
 		"""
 		self.master1 = tk.Tk()
 
-		tk.Label(self.master1, text = 'Individual Guide or All guide feedback?').grid(row=0)
-		tk.Button(self.master1, text = 'All', command = self.makePlots).grid(row=1, column=0, sticky=tk.W)#All guide scatter
-		tk.Button(self.master1, text = 'Individual', command = self.guideSearch).grid(row=1, column=1, sticky=tk.W, padx = 4,pady=4)#Individual Search
-		tk.Button(self.master1, text = 'Quit', command = self.master1.quit).grid(row=1, column=2, sticky=tk.W, padx = 4,pady=4)#Quit Button
+		tk.Label(self.master1, text = 'Would you like to view feedback for all guides or an individual guide?').grid(row=0, padx = 5, pady=5)#Command question (displayed above buttons)
+		tk.Button(self.master1, text = 'All', command = self.makePlots).grid(row=1, column=0, sticky=tk.W , padx = 5, pady=5)#All guide scatter
+		tk.Button(self.master1, text = 'Individual', command = self.guideSearch).grid(row=2, column=0, sticky=tk.W, padx = 5, pady=5)#Individual Search
+		tk.Button(self.master1, text = 'Quit', command = self.master1.quit).grid(row=3, column=0, sticky=tk.W, padx = 5,pady=5)#Quit Button
 
 		# Runs searchType widget
 		self.master1.mainloop()
@@ -248,7 +230,7 @@ test1.RunAll()
 
 											###################################
 										###########################################
-							# ######### BELOW FUNCTIONS ARE COPIED INTO CODE ABOVE ############
+							# ######### BELOW FUNCTIONS ARE COPIED INTO CLASS ABOVE ############
 										###########################################
 											###################################
 

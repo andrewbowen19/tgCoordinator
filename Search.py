@@ -1,5 +1,6 @@
 # Feedback system for the tour guide program:
 # Northwestern Univeristy Office of Undergraduate Admissions
+# Segal Visitor's Center
 # 1841 Hinman Ave, Evanston, IL, 60201
 # Author: Andrew Bowen
 # License: MIT License
@@ -146,6 +147,11 @@ class Search(object):
 			indGuideScore = indGuideFeedback['Guide Score']
 			indRouteScore = indGuideFeedback['Route Score']
 
+			# Checking guide name spelling
+			# if guideName in names:
+
+			print(guideName)
+
 			# Experience score
 			f,ax = plt.subplots(figsize = (8,5))
 			ax.hist(indExpScore, bins = 5, color = purpleNU)#histogram with Northwestern purple Go 'Cats
@@ -167,7 +173,7 @@ class Search(object):
 			ax.hist(indGuideScore, bins = 5, color = purpleNU)
 			ax.set_xlim((0,6))
 			ax.set_ylim((0,6))
-			ax.set_xlabel('Guide Score Scores')
+			ax.set_xlabel('Guide Score')
 			ax.set_title(guideName)
 
 			# ######### Scatter plots to see score correlations ###########
@@ -192,6 +198,13 @@ class Search(object):
 
 			plt.show()
 
+			# Bad search terms (misspelled guides name/not a guide)
+			# else:
+
+			# 	self.newMaster = tk.Tk()
+			# 	tk.Label(self.newMaster, text="That guide is not in our database, please try again").grid(row=0)#Raises error widget
+				# print('That guide is not in our database!, please try again')
+
 		# Setting up input buttons on entry widget
 		quitButton = tk.Button(self.master, text='Quit', command= self.master.quit).grid(row=3, column=0, sticky=tk.W, pady=4)#Quit button
 		backButton = tk.Button(self.master, text = 'Back', command = self.master.quit).grid(row=3, column =1, sticky=tk.W, padx = 5,pady=5)#Back button
@@ -210,14 +223,19 @@ class Search(object):
 		tk.Label(self.master1, text = 'Would you like to view feedback for all guides or an individual guide?').grid(row=0, padx = 5, pady=5)#Command question (displayed above buttons)
 		tk.Button(self.master1, text = 'All', command = self.makePlots).grid(row=1, column=0, sticky=tk.W , padx = 5, pady=5)#All guide scatter
 		tk.Button(self.master1, text = 'Individual', command = self.guideSearch).grid(row=2, column=0, sticky=tk.W, padx = 5, pady=5)#Individual Search
-		tk.Button(self.master1, text = 'Quit', command = self.master1.quit).grid(row=3, column=0, sticky=tk.W, padx = 5,pady=5)#Quit Button
+		tk.Button(self.master1, text = 'Joint Pair', command = self.master1.quit).grid(row=3, column=0, sticky=tk.W, padx = 5, pady=5) # Joint pair search
+		tk.Button(self.master1, text = 'Quit', command = self.master1.quit).grid(row=4, column=0, sticky=tk.W, padx = 5, pady=5)#Quit Button
+
 
 		# Runs searchType widget
 		self.master1.mainloop()
 
 	def RunAll(self):
+		
 		self.searchType()
 		self.guideSearch()
+		# self.show_entry_fields()
+
 
 test1 = Search()
 test1.RunAll()

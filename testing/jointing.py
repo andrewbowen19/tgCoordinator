@@ -34,22 +34,24 @@ def makePlots(Guide1, Guide2):
 
 	# Guide - Exp Score plot
 	f,ax = plt.subplots()
-	ax.scatter(guide1Data['Guide Score'], guide1Data['Exp Score'], label = Guide1) # Guide 1 guide-exp score
-	ax.scatter(guide2Data['Guide Score'], guide2Data['Exp Score'], label = Guide2)
+	ax.scatter(guide1Data['Guide Score'], guide1Data['Exp Score'], color = '#4E2A84',marker = '^',label = Guide1) # Guide 1 guide-exp score
+	ax.scatter(guide2Data['Guide Score'], guide2Data['Exp Score'], color = '#4E2A84',marker = 'o',label = Guide2)
 	ax.set_xlim(0.,5.5)
 	ax.set_ylim(0.,5.5)
 	ax.set_xlabel('Guide Score')
 	ax.set_ylabel('Experience Score')
 	ax.set_title(Guide1 + ' ' + Guide2)
+	ax.legend()
 
 	f,ax = plt.subplots()
-	ax.scatter(guide1Data['Route Score'], guide1Data['Exp Score'], label = Guide1) # Guide 1 guide-exp score
-	ax.scatter(guide2Data['Route Score'], guide2Data['Exp Score'], label = Guide2)
+	ax.scatter(guide1Data['Route Score'], guide1Data['Exp Score'],  color = '#4E2A84',marker = '^',label = Guide1) # Guide 1 guide-exp score
+	ax.scatter(guide2Data['Route Score'], guide2Data['Exp Score'],  color = '#4E2A84',marker = 'o',label = Guide2)
 	ax.set_xlim(0.,5.5)
 	ax.set_ylim(0.,5.5)
 	ax.set_xlabel('Route Score')
 	ax.set_ylabel('Experience Score')
 	ax.set_title(Guide1 + ' ' + Guide2)
+	ax.legend()
 
 	plt.show()
 
@@ -74,7 +76,7 @@ def pairSearch():
 
 
 		# Insert makePlots() here
-		makePlots(guideName1, guideName2)
+		makePlots(name1, name2)
 
 		return guidetime1, guidetime2
 

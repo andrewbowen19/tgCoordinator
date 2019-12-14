@@ -223,8 +223,8 @@ class Search(object):
 		tk.Label(self.master1, text = 'Would you like to view feedback for all guides or an individual guide?').grid(row=0, padx = 5, pady=5)#Command question (displayed above buttons)
 		tk.Button(self.master1, text = 'All', command = self.makePlots).grid(row=1, column=0, sticky=tk.W , padx = 5, pady=5)#All guide scatter
 		tk.Button(self.master1, text = 'Individual', command = self.guideSearch).grid(row=2, column=0, sticky=tk.W, padx = 5, pady=5)#Individual Search
-		tk.Button(self.master1, text = 'Joint Pair', command = self.master1.quit).grid(row=3, column=0, sticky=tk.W, padx = 5, pady=5) # Joint pair search
-		tk.Button(self.master1, text = 'Quit', command = self.master1.quit).grid(row=4, column=0, sticky=tk.W, padx = 5, pady=5)#Quit Button
+		#tk.Button(self.master1, text = 'Joint Pair', command = self.master1.quit).grid(row=3, column=0, sticky=tk.W, padx = 5, pady=5) # Joint pair search
+		tk.Button(self.master1, text = 'Quit', command = self.master1.quit).grid(row=3, column=0, sticky=tk.W, padx = 5, pady=5)#Quit Button
 
 
 		# Runs searchType widget

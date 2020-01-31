@@ -22,13 +22,14 @@ import tkinter as tk
 from tkinter.ttk import *
 
 # Reading in visitor feedback files (responses for every guide/tour)
-indpath = '/Users/andrewbowen/tgCoordinator/data/indFiles/'
-allpath = '/Users/andrewbowen/tgCoordinator/data/allFiles/'
-feedback = pd.read_csv(allpath + 'Feedback_Form_Beta.csv', sep = ',', header = 0)
+# indpath = '/Users/andrewbowen/tgCoordinator/data/indFiles/'
+# allpath = '/Users/andrewbowen/tgCoordinator/data/allFiles/'
+feedback = pd.read_csv('./data/plotting-data.csv', sep = ',', header = 0, names = ['Timestamp','Visitor Name', 'Visitor Email', 'Visitor Type', 'Visit Date', 'Guide Name',\
+			'Exp Score', 'Route Score', 'Guide Score', 'Comments']) # Using fake data from plottign-data script - just for visualizations now
 
 # Renaming the columns for easier readability
-feedback.columns = ['Timestamp','Visitor Name', 'Visitor Email', 'Visitor Type', 'Visit Date', 'Guide Name',\
-			'Exp Score', 'Route Score', 'Guide Score', 'Comments']
+# feedback.columns = ['Timestamp','Visitor Name', 'Visitor Email', 'Visitor Type', 'Visit Date', 'Guide Name',\
+# 			'Exp Score', 'Route Score', 'Guide Score', 'Comments']
 
 # Scores for plotting later
 expScore = feedback['Exp Score']
@@ -63,27 +64,39 @@ class Search(object):
 		guideScore = feedback['Guide Score']
 		routeScore = feedback['Route Score']
 
+		#######################
+		# Fake Arrays for plotting - real plotting calls are commented out for now.
+		# guideTest = np.random.randint(0,5,50)
+		# routeTest = np.random.randint(0,5,50)
+		# expTest = np.random.randint(0,5,50)
+
+		######################
+
 		# Experience score
 		f,ax = plt.subplots(figsize = (8,5))
-		ax.hist(expScore, bins = 5, color = '#4E2A84')#histogram with Northwestern purple Go 'Cats
+		ax.hist(expScore, bins = 5, color = '#4E2A84') # histogram with Northwestern purple Go 'Cats
 		ax.set_xlim((0,6))
-		ax.set_ylim((0,6))
+		# ax.set_ylim((0,6))
 		ax.set_xlabel('Visitors\' experience scores')
 		ax.set_title('All Tour Guides')
 
 		# Route Score
 		f,ax = plt.subplots(figsize = (8,5))
 		ax.hist(routeScore, bins = 5, color = '#4E2A84')
+		# Test Data plotted
+		# ax.hist(routeTest, bins = 5, color = '#4E2A84')
 		ax.set_xlim((0,6))
-		ax.set_ylim((0,6))
+		# ax.set_ylim((0,6))
 		ax.set_xlabel('Visitors\' Route Scores')
 		ax.set_title('All Tour Guides')
 
 		# Guide Score
 		f,ax = plt.subplots(figsize = (8,5))
-		ax.hist(guideScore, bins = 5, color = '#4E2A84')
+		ax.hist(guideScore, bins = 5, color = '#4E2A84') # Plotting actual scores
+		# Test data
+		# ax.hist(guideTest, bins = 5, color = '#4E2A84') # Fake data!!!
 		ax.set_xlim((0,6))
-		ax.set_ylim((0,6))
+		# ax.set_ylim((0,6))
 		ax.set_xlabel('Guide Scores')
 		ax.set_title('All Tour Guides')
 
@@ -92,6 +105,7 @@ class Search(object):
 		# Guide Score - Exp Score
 		f,ax = plt.subplots(figsize = (8,5))
 		ax.scatter(guideScore, expScore, color = '#4E2A84')
+		# ax.scatter(guideTest, expTest, color = '#4E2A84')
 		ax.set_xlim((0,6))
 		ax.set_ylim((0,6))
 		ax.set_xlabel('Guide Score')
@@ -157,7 +171,7 @@ class Search(object):
 			f,ax = plt.subplots(figsize = (8,5))
 			ax.hist(indExpScore, bins = 5, color = purpleNU)#histogram with Northwestern purple Go 'Cats
 			ax.set_xlim((0,6))
-			ax.set_ylim((0,6))
+			# ax.set_ylim((0,6))
 			ax.set_xlabel('Visitors\' experience scores')
 			ax.set_title(guideName)
 
@@ -165,7 +179,7 @@ class Search(object):
 			f,ax = plt.subplots(figsize = (8,5))
 			ax.hist(indRouteScore, bins = 5, color = purpleNU)
 			ax.set_xlim((0,6))
-			ax.set_ylim((0,6))
+			# ax.set_ylim((0,6))
 			ax.set_xlabel('Visitors\' Route Scores')
 			ax.set_title(guideName)
 
@@ -173,7 +187,7 @@ class Search(object):
 			f,ax = plt.subplots(figsize = (8,5))
 			ax.hist(indGuideScore, bins = 5, color = purpleNU)
 			ax.set_xlim((0,6))
-			ax.set_ylim((0,6))
+			# ax.set_ylim((0,6))
 			ax.set_xlabel('Guide Score')
 			ax.set_title(guideName)
 
@@ -183,7 +197,7 @@ class Search(object):
 			f,ax = plt.subplots(figsize = (8,5))
 			ax.scatter(indGuideScore, indExpScore, color = purpleNU)
 			ax.set_xlim((0,6))
-			ax.set_ylim((0,6))
+			# ax.set_ylim((0,6))
 			ax.set_xlabel('Guide Score')
 			ax.set_ylabel('Experience Score')
 			ax.set_title(guideName)
@@ -192,7 +206,7 @@ class Search(object):
 			f,ax = plt.subplots(figsize = (8,5))
 			ax.scatter(indRouteScore, indExpScore, color = purpleNU)
 			ax.set_xlim(0,6)
-			ax.set_ylim((0,6))
+			# ax.set_ylim((0,6))
 			ax.set_xlabel('Route Score')
 			ax.set_ylabel('Experience Score')
 			ax.set_title(guideName)
@@ -318,7 +332,7 @@ class Search(object):
 
 
 
-		##################################### OLD Stuff###################################
+		##################################### OLD Stuff ###################################
 		# searchType = input('Would you like to search a joint pair of guides?[y/n]: ')
 		# if 'y' in searchType:
 

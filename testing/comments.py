@@ -52,6 +52,9 @@ def CommentSearch():
 			print(selectedGuide['Comments'])
 			print('##########################')
 
+		else:
+			print('Ard bet')
+			pass
 	# If answer 'no' or enter erroneous guide name
 	else:
 		print('Ight Imma head out then')

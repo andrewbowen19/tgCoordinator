@@ -103,23 +103,23 @@ class Search(object):
 		# ######### Scatter plots to see score correlations ###########
 
 		# Guide Score - Exp Score
-		f,ax = plt.subplots(figsize = (8,5))
-		ax.scatter(guideScore, expScore, color = '#4E2A84')
-		# ax.scatter(guideTest, expTest, color = '#4E2A84')
-		ax.set_xlim((0,6))
-		ax.set_ylim((0,6))
-		ax.set_xlabel('Guide Score')
-		ax.set_ylabel('Experience Score')
-		ax.set_title('All Tour Guides')
+		# f,ax = plt.subplots(figsize = (8,5))
+		# ax.scatter(guideScore, expScore, color = '#4E2A84')
+		# # ax.scatter(guideTest, expTest, color = '#4E2A84')
+		# ax.set_xlim((0,6))
+		# ax.set_ylim((0,6))
+		# ax.set_xlabel('Guide Score')
+		# ax.set_ylabel('Experience Score')
+		# ax.set_title('All Tour Guides')
 
 		# route Score - Exp Score
-		f,ax = plt.subplots(figsize = (8,5))
-		ax.scatter(routeScore, expScore, color = '#4E2A84')
-		ax.set_xlim((0,6))
-		ax.set_ylim((0,6))
-		ax.set_xlabel('Route Score')
-		ax.set_ylabel('Experience Score')
-		ax.set_title('All Tour Guides')
+		# f,ax = plt.subplots(figsize = (8,5))
+		# ax.scatter(routeScore, expScore, color = '#4E2A84')
+		# ax.set_xlim((0,6))
+		# ax.set_ylim((0,6))
+		# ax.set_xlabel('Route Score')
+		# ax.set_ylabel('Experience Score')
+		# ax.set_title('All Tour Guides')
 
 		plt.show()
 
@@ -193,23 +193,23 @@ class Search(object):
 
 			# ######### Scatter plots to see score correlations between scoring techniques###########
 
-			# Guide Score - Exp Score
-			f,ax = plt.subplots(figsize = (8,5))
-			ax.scatter(indGuideScore, indExpScore, color = purpleNU)
-			ax.set_xlim((0,6))
-			# ax.set_ylim((0,6))
-			ax.set_xlabel('Guide Score')
-			ax.set_ylabel('Experience Score')
-			ax.set_title(guideName)
+			# # Guide Score - Exp Score
+			# f,ax = plt.subplots(figsize = (8,5))
+			# ax.scatter(indGuideScore, indExpScore, color = purpleNU)
+			# ax.set_xlim((0,6))
+			# # ax.set_ylim((0,6))
+			# ax.set_xlabel('Guide Score')
+			# ax.set_ylabel('Experience Score')
+			# ax.set_title(guideName)
 
-			# route Score - Exp Score
-			f,ax = plt.subplots(figsize = (8,5))
-			ax.scatter(indRouteScore, indExpScore, color = purpleNU)
-			ax.set_xlim(0,6)
-			# ax.set_ylim((0,6))
-			ax.set_xlabel('Route Score')
-			ax.set_ylabel('Experience Score')
-			ax.set_title(guideName)
+			# # route Score - Exp Score
+			# f,ax = plt.subplots(figsize = (8,5))
+			# ax.scatter(indRouteScore, indExpScore, color = purpleNU)
+			# ax.set_xlim(0,6)
+			# # ax.set_ylim((0,6))
+			# ax.set_xlabel('Route Score')
+			# ax.set_ylabel('Experience Score')
+			# ax.set_title(guideName)
 
 			plt.show()
 
@@ -270,30 +270,30 @@ class Search(object):
 
 			# Joint Experience score Histograms
 			f,ax = plt.subplots(figsize = (8,5))
-			ax.hist(indExpScore1, bins = 5, color = purpleNU, label = guideName1)#histogram with Northwestern purple Go 'Cats
-			ax.hist(indExpScore2, bins = 5, color = greyNU, label = guideName2)#histogram with Northwestern purple Go 'Cats
+			ax.hist(indExpScore1, bins = 5, color = greyNU, label = guideName1)#histogram with Northwestern purple Go 'Cats
+			ax.hist(indExpScore2, bins = 5, color = purpleNU, label = guideName2, alpha = 0.5)#histogram with Northwestern purple Go 'Cats
 			ax.set_xlim((0,6))
-			ax.set_ylim((0,6))
+			# ax.set_ylim((0,6))
 			ax.set_xlabel('Visitors\' experience scores')
 			ax.set_title(guideName1 + ' & '  + guideName2)
 			ax.legend()
 
 			# joint Route score histograms
 			f,ax = plt.subplots(figsize = (8,5))
-			ax.hist(indRouteScore1, bins = 5, color = purpleNU, label = guideName1)
-			ax.hist(indRouteScore2, bins = 5, color = greyNU, label = guideName2)
+			ax.hist(indRouteScore1, bins = 5, color = greyNU, label = guideName1)
+			ax.hist(indRouteScore2, bins = 5, color = purpleNU, label = guideName2, alpha = 0.5)
 			ax.set_xlim((0,6))
-			ax.set_ylim((0,6))
+			# ax.set_ylim((0,6))
 			ax.set_xlabel('Visitors\' Route Scores')
 			ax.set_title(guideName1 + ' & '  + guideName2)
 			ax.legend()
 
 			# joint guide score histograms
 			f,ax = plt.subplots(figsize = (8,5))
-			ax.hist(indGuideScore1, bins = 5, color = purpleNU, label = guideName1)
-			ax.hist(indGuideScore2, bins = 5, color = greyNU, label = guideName2)
+			ax.hist(indGuideScore1, bins = 5, color = greyNU, label = guideName1)
+			ax.hist(indGuideScore2, bins = 5, color = purpleNU, label = guideName2, alpha = 0.5)
 			ax.set_xlim((0,6))
-			ax.set_ylim((0,6))
+			# ax.set_ylim((0,6))
 			ax.set_xlabel('Guide Score')
 			ax.set_title(guideName1 + ' & '  + guideName2)
 			ax.legend()
@@ -301,26 +301,26 @@ class Search(object):
 			# ######### Scatter plots to see score correlations between scoring techniques ###########
 
 			# joint Guide Score - Exp Score
-			f,ax = plt.subplots(figsize = (8,5))
-			ax.scatter(indGuideScore1, indExpScore1, color = purpleNU, label = guideName1)
-			ax.scatter(indGuideScore2, indExpScore2, color = greyNU, marker = '^', label = guideName2)
-			ax.set_xlim((0,6))
-			ax.set_ylim((0,6))
-			ax.set_xlabel('Guide Score')
-			ax.set_ylabel('Experience Score')
-			ax.set_title(guideName1 + ' & '  + guideName2)
-			ax.legend()
+			# f,ax = plt.subplots(figsize = (8,5))
+			# ax.scatter(indGuideScore1, indExpScore1, color = purpleNU, label = guideName1)
+			# ax.scatter(indGuideScore2, indExpScore2, color = greyNU, marker = '^', label = guideName2)
+			# ax.set_xlim((0,6))
+			# ax.set_ylim((0,6))
+			# ax.set_xlabel('Guide Score')
+			# ax.set_ylabel('Experience Score')
+			# ax.set_title(guideName1 + ' & '  + guideName2)
+			# ax.legend()
 
 			# joint route Score - Exp Score
-			f,ax = plt.subplots(figsize = (8,5))
-			ax.scatter(indRouteScore1, indExpScore1, color = purpleNU, label = guideName1)
-			ax.scatter(indRouteScore2, indExpScore2, color = greyNU, marker = '^', label = guideName2)
-			ax.set_xlim(0,6)
-			ax.set_ylim((0,6))
-			ax.set_xlabel('Route Score')
-			ax.set_ylabel('Experience Score')
-			ax.set_title(guideName1 + ' & '  + guideName2)
-			ax.legend()
+			# f,ax = plt.subplots(figsize = (8,5))
+			# ax.scatter(indRouteScore1, indExpScore1, color = purpleNU, label = guideName1)
+			# ax.scatter(indRouteScore2, indExpScore2, color = greyNU, marker = '^', label = guideName2)
+			# ax.set_xlim(0,6)
+			# ax.set_ylim((0,6))
+			# ax.set_xlabel('Route Score')
+			# ax.set_ylabel('Experience Score')
+			# ax.set_title(guideName1 + ' & '  + guideName2)
+			# ax.legend()
 
 			plt.show()
 

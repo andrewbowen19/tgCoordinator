@@ -37,14 +37,24 @@ for first, last in zip(firstName, lastName):
 # passwords = ['1234' for x in range(len(guideEmails))]
 
 # Now we want to create a dictionary from our emails list and our password list (maybe names too)
-userDict = {guideEmails[i] : '' for i in range(len(masterList))}
-
-print(userDict)
+# userDict = {guideEmails[i] : '' for i in range(len(masterList))}
+userDict = {}
+# print(userDict)
 
 
 # ############################################################################### # # # # # # # # # # #
 
 # Need to salt and hash passwords - testing out bcrypt
+
+def addSaltedUser(username, password, dictionary):
+	# Function that salts/hashes passwords and adds to userdict;
+
+	hashed = bcrypt.hashpw(bytes(password, 'utf8'), bcrypt.gensalt())
+
+	dictionary[username] = password
+
+	print('username: ', username)
+	print('new Dict with all the salt: ', dictionary)
 
 
 def createUser():
@@ -54,10 +64,6 @@ def createUser():
 	# creating tkinter widget
 	master = tk.Tk()
 
-	# Adding buttons to create user page
-	tk.Button(master, text = 'Quit', command = master.quit).grid(row = 3, column =0)
-	tk.Button(master, text = 'Create User', command = master.home).grid(row=3, column=1)
-
 	tk.Label(master, text="Enter Email").grid(row=0)
 	tk.Label(master, text="Enter password").grid(row=1)
 	tk.Label(master, text="Confirm password").grid(row=2)
@@ -66,51 +72,83 @@ def createUser():
 	e2 = tk.Entry(master)
 	e3 = tk.Entry(master)
 
-
 	e1.grid(row=0, column=1)
 	e2.grid(row=1, column=1)
-	e3.grid(row=2,column=1)
+	e3.grid(row=2, column=1)
 
+	# Having an issue where these 'get' calls are returning empty strings
 	userEmail = e1.get()
 	userPass = e2.get()
 	confirmPass = e3.get()
 
-	# userEmail = input('What is your NU email?: ')
-	# userPass = input('Please input a password: ')
-	# confirmPass = input('Please re-enter your password for confirmation: ')
+	# print('email & pass: ', userEmail, userPass)
+
+	# Adding buttons to create user page
+	tk.Button(master, text = 'Quit', command = master.quit).grid(row = 3, column =0)
+	tk.Button(master, text = 'Create User', command = addSaltedUser(e1.get(), userPass, userDict)).grid(row=3, column=1)
+
+	################### - # - OLD - # -  ######################################
+	# userEmail = input('What is your NU email?: ')#                          #
+	# userPass = input('Please input a password: ')#                          #
+	# confirmPass = input('Please re-enter your password for confirmation: ') #
+	###########################################################################
+
 
 	# Password confirmation
-	if userPass == confirmPass:
-		print('Welcome, fam')
+	# if userPass == confirmPass:
+	# 	print('Welcome, fam')
 
-		# Now we salt and hash the passwords using bcrypt -- DO NOT STORE USER PASSWORDS IN PLAINTEXT!!!
-		userPass = bytes(userPass, 'utf8') # need to convert passwords to bytes for bcrypt
-		hashed = bcrypt.hashpw(userPass, bcrypt.gensalt())
-		userDict[userEmail] = hashed
-		print('new user dict: ', userDict)
+	# 	# Now we salt and hash the passwords using bcrypt -- DO NOT STORE USER PASSWORDS IN PLAINTEXT!!!
+	# 	userPass = bytes(userPass, 'utf8') # need to convert passwords to bytes for bcrypt
+	# 	hashed = bcrypt.hashpw(userPass, bcrypt.gensalt())
+	# 	userDict[userEmail] = hashed
+	# 	print('new user dict: ', userDict)
 
-		# Can check if hashed password and raw password match
-		# if bcrypt.checkpw(userPass, hashed):
-		# 	print("It Matches!")
-		# else:
-		# 	print("It Does not Match :(")
+	# 	# Can check if hashed password and raw password match
+	# 	# if bcrypt.checkpw(userPass, hashed):
+	# 	# 	print("It Matches!")
+	# 	# else:
+	# 	# 	print("It Does not Match :(")
 
-		# User hashed passwords aded to our dictionaries
+	# 	# User hashed passwords aded to our dictionaries
 
-	else:
-		print('The passwords provided do not match.')
+	# else:
+	# 	print('The passwords provided do not match.')
 
 
 
 def login():
 	"""Function that allows guides to login"""
-	email = input('What is your email: ')
+	# email = input('What is your email: ')
+
+	master = tk.Tk()
+
+	tk.Label(master, text="Enter Email").grid(row=0)
+	tk.Label(master, text="Enter password").grid(row=1)
+	# tk.Label(master, text="Confirm password").grid(row=2)
+
+	e1 = tk.Entry(master)
+	e2 = tk.Entry(master)
+
+	e1.grid(row=0, column=1)
+	e2.grid(row=1, column=1)
+	# e3.grid(row=2,column=1)
+
+	email = e1.get()
+
+
 	if email in userDict:
 
-		password = input('Please input your password: ')
+		password = e2.get()
+		# password = input('Please input your password: ')
+
+		# Now check hashing password
+
+		if bcrypt.checkpw(password, userDict[email]):
+
 
 		# If password entered is correct (using 1234 as test case)
-		if password == userDict[email]:
+		# if password == userDict[email]:
 			print('you in, homie')
 			return True
 		else:
@@ -134,10 +172,6 @@ master = tk.Tk()
 loginButton = tk.Button(master, text = 'Login', command = login).grid(row=0, column=0, sticky=tk.W, pady=4)
 createAccountButton = tk.Button(master, text = 'Create Account', command = createUser).grid(row=1, column=0, sticky=tk.W, pady=4)
 
-
-e1 = tk.Entry(master)
-e2 = tk.Entry(master)
-e3 = tk.Entry(master)
 master.mainloop()
 
 # createUser()

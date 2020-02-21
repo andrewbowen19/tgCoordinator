@@ -52,7 +52,7 @@ class User(tk.Tk):
 		'''
 
 	def __init__(self):
-		tk.Tk.__init__(self)
+		self.master = tk.Tk.__init__(self)
 		self.entry = tk.Entry(self)
 		self.entry = tk.Entry(self)
 		self.button = tk.Button(self, text="Create User", command=self.createUser).grid(row=0, column=0, padx = 4, pady = 2)
@@ -97,13 +97,16 @@ class User(tk.Tk):
 
 		# Adding buttons to create user page
 		tk.Button(self, text = 'Quit', command = self.quit).grid(row = 3, column =0)
-		tk.Button(self, text = 'Create User', command = self.on_button).grid(row=3, column=1)
+		tk.Button(self, text = 'Create User', command = self.addSaltedUser(e1.get(), e2.get(), userDict)).grid(row=3, column=1)
+
+
+		# self.mainloop()
 
 	def login(self):
 		"""Function that allows guides to login"""
 
 
-		# master = tk.Tk()
+		self.master = tk.Tk()
 
 		tk.Label(self, text="Enter Email").grid(row=0)
 		tk.Label(self, text="Enter password").grid(row=1)
@@ -116,42 +119,52 @@ class User(tk.Tk):
 		e2.grid(row=1, column=1)
 		# e3.grid(row=2,column=1)
 
-		email = e1.get()
+		# email = e1.get()
 
+		tk.Button(self, text='Quit', command= self.on_button).grid(row=2, column=1)
+		tk.Button(self, text='Enter', command= self.on_button).grid(row=2, column=1)
 
-		if email in userDict:
+		
 
-			password = e2.get()
+		# self.mainloop()
+		# if email in self.userDict:
+
+			# password = e2.get()
 			# password = input('Please input your password: ')
 
 			# Now check hashing password
 
-			if bcrypt.checkpw(password, userDict[email]):
+			# if bcrypt.checkpw(password, self.userDict[email]):
 
 
 			# If password entered is correct (using 1234 as test case)
 			# if password == userDict[email]:
-				print('you in, homie')
-				return True
-			else:
-				return False
+				# print('you in, homie')
+			# 	return True
+			# else:
+			# 	return False
 
-		else:
-			response = input('That email is not in our system, would you like to try again? [y/n]: ')
-			if 'n' in response or 'no' in response or 'N' in response:
-				return True
-			else:
-				return False
+		# else:
+		# 	print(False)
+			# response = input('That email is not in our system, would you like to try again? [y/n]: ')
+			# if 'n' in response or 'no' in response or 'N' in response:
+			# 	return True
+			# else:
+			# 	return False
+		self.master.mainloop()
 
 	def runAll(self):
-		self.mainloop()
+		self.createUser()
+		self.login()
+
+		
 
 
 user = User()
-user.runAll()
+# user.mainloop()
 
 
-
+# breakpoint()
 
 
 

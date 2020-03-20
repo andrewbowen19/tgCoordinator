@@ -18,6 +18,7 @@ uses Tkinter python package to create popup windows
 import numpy as np
 import pandas as pd
 import tkinter as tk
+
 # Ussing themed tkinter widgets (ttk) to create more modern-looking GUIs, need to do some research on it
 from tkinter.ttk import *
 
@@ -42,6 +43,10 @@ names = feedback['Guide Name']
 purpleNU = '#4E2A84'
 greyNU = '#716C6B'
 
+# bins and limits for out plots later
+xmin, xmax, Nx = 0,5,5
+ymin, ymax, Ny = 0,5,5
+
 # ################################################### Writing this as a class ####################################
 
 class Search(object):
@@ -60,6 +65,7 @@ class Search(object):
 		 '''
 
 		import matplotlib.pyplot as plt
+		import matplotlib.cm as cm
 		expScore = feedback['Exp Score']
 		guideScore = feedback['Guide Score']
 		routeScore = feedback['Route Score']
@@ -100,26 +106,28 @@ class Search(object):
 		ax.set_xlabel('Guide Scores')
 		ax.set_title('All Tour Guides')
 
-		# ######### Scatter plots to see score correlations ###########
+		# ######### 2D histograms score correlations ###########
 
 		# Guide Score - Exp Score
-		# f,ax = plt.subplots(figsize = (8,5))
-		# ax.scatter(guideScore, expScore, color = '#4E2A84')
-		# # ax.scatter(guideTest, expTest, color = '#4E2A84')
-		# ax.set_xlim((0,6))
-		# ax.set_ylim((0,6))
-		# ax.set_xlabel('Guide Score')
-		# ax.set_ylabel('Experience Score')
-		# ax.set_title('All Tour Guides')
+		f,ax = plt.subplots(figsize = (8,5))
+		ax.hist2d(guideScore, expScore, bins=[Nx, Ny], \
+			range=[[xmin, xmax], [ymin, ymax]], cmap = cm.Blues)
+		ax.set_xlabel('Guide Score')
+		ax.set_ylabel('Experience Score')
+		ax.set_title('All Tour Guides')
+		cbar = f.colorbar(im)
+		cbar.ax.set_ylabel(r'# Scores', rotation = 270, labelpad = 8)
+
 
 		# route Score - Exp Score
-		# f,ax = plt.subplots(figsize = (8,5))
-		# ax.scatter(routeScore, expScore, color = '#4E2A84')
-		# ax.set_xlim((0,6))
-		# ax.set_ylim((0,6))
-		# ax.set_xlabel('Route Score')
-		# ax.set_ylabel('Experience Score')
-		# ax.set_title('All Tour Guides')
+		f,ax = plt.subplots(figsize = (8,5))
+		ax.hist2d(routeScore, expScore, bins=[Nx, Ny], \
+			range=[[xmin, xmax], [ymin, ymax]], cmap = cm.Blues)
+		ax.set_xlabel('Route Score')
+		ax.set_ylabel('Experience Score')
+		ax.set_title('All Tour Guides')
+		cbar = f.colorbar(im)
+		cbar.ax.set_ylabel(r'# Scores', rotation = 270, labelpad = 8)
 
 		plt.show()
 
@@ -152,6 +160,7 @@ class Search(object):
 			"""Function to make individual guide plots (exp score, route score, guide score
 				Copied from our guide-feedback script in parent repo"""
 			import matplotlib.pyplot as plt
+			import matplotlib.cm as cm
 
 			guideName = self.e1.get() + ' ' +  self.e2.get()
 			guideFeedback = feedback.loc[names == guideName]
@@ -191,25 +200,29 @@ class Search(object):
 			ax.set_xlabel('Guide Score')
 			ax.set_title(guideName)
 
-			# ######### Scatter plots to see score correlations between scoring techniques###########
 
-			# # Guide Score - Exp Score
-			# f,ax = plt.subplots(figsize = (8,5))
-			# ax.scatter(indGuideScore, indExpScore, color = purpleNU)
-			# ax.set_xlim((0,6))
-			# # ax.set_ylim((0,6))
-			# ax.set_xlabel('Guide Score')
-			# ax.set_ylabel('Experience Score')
-			# ax.set_title(guideName)
+			# ######### 2D histograms score correlations ###########
 
-			# # route Score - Exp Score
-			# f,ax = plt.subplots(figsize = (8,5))
-			# ax.scatter(indRouteScore, indExpScore, color = purpleNU)
-			# ax.set_xlim(0,6)
-			# # ax.set_ylim((0,6))
-			# ax.set_xlabel('Route Score')
-			# ax.set_ylabel('Experience Score')
-			# ax.set_title(guideName)
+			# Guide Score - Exp Score
+			f,ax = plt.subplots(figsize = (8,5))
+			h2d, x2D, y2D, im  = h2d, x2D, y2D, im  = ax.hist2d(guideScore, expScore, bins=[Nx, Ny], \
+				range=[[xmin, xmax], [ymin, ymax]], cmap = cm.Blues)
+			ax.set_xlabel('Guide Score')
+			ax.set_ylabel('Experience Score')
+			ax.set_title('All Tour Guides')
+			cbar = f.colorbar(im)
+			cbar.ax.set_ylabel(r'# Scores', rotation = 270, labelpad = 8)
+
+			# route Score - Exp Score
+			f,ax = plt.subplots(figsize = (8,5))
+			h2d, x2D, y2D, im  = h2d, x2D, y2D, im = ax.hist2d(routeScore, expScore, bins=[Nx, Ny], \
+				range=[[xmin, xmax], [ymin, ymax]], cmap = cm.Blues)
+			ax.set_xlabel('Route Score')
+			ax.set_ylabel('Experience Score')
+			ax.set_title('All Tour Guides')
+				# Adding colorbar
+			cbar = f.colorbar(im)
+			cbar.ax.set_ylabel(r'# Scores', rotation = 270, labelpad = 8)
 
 			plt.show()
 

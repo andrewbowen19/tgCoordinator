@@ -16,7 +16,7 @@ import bcrypt
 
 # ####################################################################################
 # Reading in TG master list data file
-masterList = pd.read_csv('./../data/Master-List.csv', header = 0, skiprows = [1])
+masterList = pd.read_csv('./../../data/Master-List.csv', header = 0, skiprows = [1])
 guideEmails = masterList['Email']
 
 # ####################################################################################
@@ -52,11 +52,11 @@ class User(tk.Tk):
 		'''
 
 	def __init__(self):
-		self.master = tk.Tk.__init__(self)
-		self.entry = tk.Entry(self)
-		self.entry = tk.Entry(self)
-		self.button = tk.Button(self, text="Create User", command=self.createUser).grid(row=0, column=0, padx = 4, pady = 2)
-		self.button = tk.Button(self, text = 'Login', command = self.login).grid(row = 1, column = 0, padx =4 , pady = 2)
+		# self.master = tk.Tk.__init__(self)
+		# self.entry = tk.Entry(self)
+		# self.entry = tk.Entry(self)
+		# self.button = tk.Button(self, text="Create User", command=self.createUser).grid(row=0, column=0, padx = 4, pady = 2)
+		# self.button = tk.Button(self, text = 'Login', command = self.login).grid(row = 1, column = 0, padx =4 , pady = 2)
 		self.userDict = dict()
 
 
@@ -76,82 +76,47 @@ class User(tk.Tk):
 
 
 	def createUser(self):
+		self.master = tk.Tk()
 		# Function to creat user profile and pass user infor to addUser function
 		# Setting up entry fields in proper places
-		e1 = tk.Entry(self).grid(row=0, column=1)
-		e2 = tk.Entry(self).grid(row=1, column=1)
-		e3 = tk.Entry(self).grid(row=2, column=1)
+		e1 = tk.Entry(self.master).grid(row=0, column=1)
+		e2 = tk.Entry(self.master).grid(row=1, column=1)
+		e3 = tk.Entry(self.master).grid(row=2, column=1)
 
-		tk.Label(self, text="Enter Email").grid(row=0)
-		tk.Label(self, text="Enter password").grid(row=1)
-		tk.Label(self, text="Confirm password").grid(row=2)
+		tk.Label(self.master, text="Enter Email").grid(row=0)
+		tk.Label(self.master, text="Enter password").grid(row=1)
+		tk.Label(self.master, text="Confirm password").grid(row=2)
 
-		# # Setting up entry fields
-		# e1 = self.entry.grid(row=0, column=1)
-		# e2 = self.entry.grid(row=1, column=1)
-		# e3 = self.entry.grid(row=2, column=1)
-
-		# test = self.entry.get()
-		# print(test)
-		# print('email & pass: ', userEmail, userPass)
+		email = e1.get()
+		password = e2.get()
+		confirmPass = e3.get()
 
 		# Adding buttons to create user page
-		tk.Button(self, text = 'Quit', command = self.quit).grid(row = 3, column =0)
-		tk.Button(self, text = 'Create User', command = self.addSaltedUser(e1.get(), e2.get(), userDict)).grid(row=3, column=1)
+		tk.Button(self.master, text = 'Quit', command = self.quit).grid(row = 3, column =0)
+		tk.Button(self.master, text = 'Create User', command = self.addSaltedUser(email, e2.get(), userDict)).grid(row=3, column=1)
 
-
-		# self.mainloop()
+		self.master.mainloop()
 
 	def login(self):
 		"""Function that allows guides to login"""
-
-
 		self.master = tk.Tk()
 
-		tk.Label(self, text="Enter Email").grid(row=0)
-		tk.Label(self, text="Enter password").grid(row=1)
+		tk.Label(self.master, text="Enter Email").grid(row=0)
+		tk.Label(self.master, text="Enter password").grid(row=1)
 		# tk.Label(master, text="Confirm password").grid(row=2)
 
-		e1 = tk.Entry(self)
-		e2 = tk.Entry(self)
+		e1 = tk.Entry(self.master)
+		e2 = tk.Entry(self.master)
 
 		e1.grid(row=0, column=1)
 		e2.grid(row=1, column=1)
-		# e3.grid(row=2,column=1)
 
-		# email = e1.get()
+		tk.Button(self.master, text='Quit', command= self.on_button).grid(row=2, column=1)
+		tk.Button(self.master, text='Enter', command= self.on_button).grid(row=2, column=1)
 
-		tk.Button(self, text='Quit', command= self.on_button).grid(row=2, column=1)
-		tk.Button(self, text='Enter', command= self.on_button).grid(row=2, column=1)
+		self.master.mainloop()
 
 		
-
-		# self.mainloop()
-		# if email in self.userDict:
-
-			# password = e2.get()
-			# password = input('Please input your password: ')
-
-			# Now check hashing password
-
-			# if bcrypt.checkpw(password, self.userDict[email]):
-
-
-			# If password entered is correct (using 1234 as test case)
-			# if password == userDict[email]:
-				# print('you in, homie')
-			# 	return True
-			# else:
-			# 	return False
-
-		# else:
-		# 	print(False)
-			# response = input('That email is not in our system, would you like to try again? [y/n]: ')
-			# if 'n' in response or 'no' in response or 'N' in response:
-			# 	return True
-			# else:
-			# 	return False
-		self.master.mainloop()
 
 	def runAll(self):
 		self.createUser()
@@ -161,6 +126,7 @@ class User(tk.Tk):
 
 
 user = User()
+user.runAll()
 # user.mainloop()
 
 

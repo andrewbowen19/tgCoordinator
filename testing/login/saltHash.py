@@ -33,3 +33,6 @@ for word in passwords:
 		print("It Matches!")
 	else:
 	    print("It Does not Match :(")
+
+
+# DO NOT use this script

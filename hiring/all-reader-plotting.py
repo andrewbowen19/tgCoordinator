@@ -171,21 +171,22 @@ print(all_stats)
 all_stats.to_csv('./data/reader-stats.csv')
 
 # #######################################################################################################
-# Printing out winners and losers
+# Printing out nicest and meanest readers and their respective scores
+
 print('')
 print('###################################')
 
-print('Nicest for Appropriate: ', all_stats['Name'][all_stats['App mean'].idxmax()])#.loc[np.argmax(all_stats['App mean'])])
-print('Nicest for Originality: ', all_stats['Name'][all_stats['Org mean'].idxmax()])
-print('Nicest for Campus Awareness: ',  all_stats['Name'][all_stats['CA mean'].idxmax()])
-print('Most apps read: ', all_stats['Name'][all_stats['Napps'].idxmax()])
+print('Nicest for Appropriate: ', all_stats['Name'][all_stats['App mean'].idxmax()], '(',np.max(all_stats['App mean']), ')') #.loc[np.argmax(all_stats['App mean'])])
+print('Nicest for Originality: ', all_stats['Name'][all_stats['Org mean'].idxmax()], '(',np.max(all_stats['Org mean']), ')')
+print('Nicest for Campus Awareness: ',  all_stats['Name'][all_stats['CA mean'].idxmax()], '(',np.max(all_stats['CA mean']), ')')
+print('Most apps read: ', all_stats['Name'][all_stats['Napps'].idxmax()], '(',np.max(all_stats['Napps']), ')')
 
 print('###################################')
 
-print('Meanest for Appropriate: ', all_stats['Name'][all_stats['App mean'].idxmin()])
-print('Meanest for Originality: ', all_stats['Name'][all_stats['Org mean'].idxmin()])
-print('Meanest for Campus Awareness: ',  all_stats['Name'][all_stats['CA mean'].idxmin()])
-print('Least apps read: ', all_stats['Name'][all_stats['Napps'].idxmin()])
+print('Meanest for Appropriate: ', all_stats['Name'][all_stats['App mean'].idxmin()], '(',np.min(all_stats['App mean']), ')')
+print('Meanest for Originality: ', all_stats['Name'][all_stats['Org mean'].idxmin()], '(',np.min(all_stats['Org mean']), ')')
+print('Meanest for Campus Awareness: ',  all_stats['Name'][all_stats['CA mean'].idxmin()], '(',np.min(all_stats['CA mean']), ')')
+print('Least apps read: ', all_stats['Name'][all_stats['Napps'].idxmin()], '(',np.min(all_stats['Napps']), ')')
 
 # #######################################################################
 

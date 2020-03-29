@@ -1,10 +1,21 @@
-# Writing class for application to make guide plots -- shedding tkinter
+from django.db import models
 
+# Create your models here.
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import matplotlib.cm as cm
 
+
+class Question(models.Model):
+    question_text = models.CharField(max_length=200)
+    pub_date = models.DateTimeField('date published')
+
+
+class Choice(models.Model):
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    choice_text = models.CharField(max_length=200)
+    votes = models.IntegerField(default=0)
 
 class GuidePlots(object):
 
@@ -56,7 +67,7 @@ class GuidePlots(object):
 
 		self.guideName = guideName
 
-		# Guide Score - Exp Score
+		# creating figure
 		f,ax = plt.subplots(figsize = (8,5))
 		h2d, x2D, y2D, im  = h2d, x2D, y2D, im  = ax.hist2d(xscores, yscores, bins=[Nx, Ny], \
 			range=[[xmin, xmax], [ymin, ymax]], cmap = cm.Blues)
@@ -65,23 +76,6 @@ class GuidePlots(object):
 		ax.set_title(self.guideName)
 		cbar = f.colorbar(im)
 		cbar.ax.set_ylabel(r'# Scores', rotation = 270, labelpad = 8)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

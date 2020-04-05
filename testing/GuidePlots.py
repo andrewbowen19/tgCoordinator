@@ -1,4 +1,13 @@
-# Writing class for application to make guide plots -- shedding tkinter
+'''
+Writing class for application to make guide plots -- shedding tkinter
+'''
+
+# Tour Guide Program : Feedback system
+# Northwestern Univeristy Office of Undergraduate Admissions
+# Segal Visitors' Center
+# 1841 Hinman Ave, Evanston, IL, 60201
+# Author: Andrew Bowen
+# License: MIT License
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -56,7 +65,7 @@ class GuidePlots(object):
 
 		self.guideName = guideName
 
-		# Guide Score - Exp Score
+		# creating figure
 		f,ax = plt.subplots(figsize = (8,5))
 		h2d, x2D, y2D, im  = h2d, x2D, y2D, im  = ax.hist2d(xscores, yscores, bins=[Nx, Ny], \
 			range=[[xmin, xmax], [ymin, ymax]], cmap = cm.Blues)

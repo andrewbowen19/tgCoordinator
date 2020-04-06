@@ -16,6 +16,10 @@ import matplotlib.cm as cm
 
 
 class GuidePlots(object):
+	'''
+	Class to generate plots and data visualizations for django web-based app
+	Need to 
+	'''
 
 	def __init__(self, guideName):
 		self.guideName = None

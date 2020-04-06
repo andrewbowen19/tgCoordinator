@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include,path
+from plots import views
 
 urlpatterns = [
     path('plots/', include('plots.urls')),

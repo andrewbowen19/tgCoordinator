@@ -2,12 +2,14 @@
 
 <link rel="stylesheet" type="text/css" href="{% static 'plots/style.css' %}">
 
-{% if latest_question_list %}
-    <ul>
-    {% for question in latest_question_list %}
-        <li><a href="{% url 'plots:detail' question.id %}">{{ question.question_text }}</a></li>
-    {% endfor %}
-    </ul>
-{% else %}
+{% if guide %}
     <p>Your plot (and winter) is coming.</p>
+
+{% else %}
+    <li>We like sportz and we don't care who knows.</li>
 {% endif %}
+
+
+
+
+<p>Go 'Cats baby</p>

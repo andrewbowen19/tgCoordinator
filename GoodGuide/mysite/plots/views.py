@@ -1,14 +1,20 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from .models import Question
+from .models import Question, Guide, Visitor
+
+from django.template import loader
+from django.contrib.auth import authenticate, login
 
 # Create your views here.
 def index(request):
-    latest_question_list = Question.objects.order_by('-pub_date')[:5]
+    guide_name = Guide.objects
+    # output = ','.join([g.name for g in guides])
     template = loader.get_template('plots/index.html')
     context = {
-        'latest_question_list': latest_question_list,
+        'guide_name': guide_name,
+        
     }
+
     return HttpResponse(template.render(context, request))
 
 def detail(request, question_id):
@@ -22,10 +28,18 @@ def results(request, question_id):
     response = "You're looking at the plot called %s."
     return HttpResponse(response % question_id)
 
-def plot(request, question_id):
-    return HttpResponse("You're viewing the plot! %s." % question_id)
+def plot(guide_name):
+    return HttpResponse("You're viewing the plot! %guide_name." % guide_name)
 
+def login(request):
+    username = request.POST['username']
+    password = request.POST['password']
+    user = authenticate(request, username=username, password=password)
+    if user is not None:
+        login(request, user)
 
+    else:
+        return HttpResponse('Sorry, that user is not in our database.')
 
 
 

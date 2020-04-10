@@ -56,12 +56,12 @@ def get_tweets_for_model(cleaned_tokens_list):
     for tweet_tokens in cleaned_tokens_list:
         yield dict([token, True] for token in tweet_tokens)
 
-# if __name__ == "__main__":
-# Wrapping this into a function we can call
-
-def classifyComment(comment):
-
-    # Positive and negative tweet lists
+def trainClassifier():
+    '''
+    Function to train model on classifying positive and negative comments
+    
+    '''
+        # Positive and negative tweet lists
     positive_tweets = twitter_samples.strings('positive_tweets.json')
     negative_tweets = twitter_samples.strings('negative_tweets.json')
     text = twitter_samples.strings('tweets.20150430-223406.json')
@@ -105,21 +105,25 @@ def classifyComment(comment):
     # Establishing training and testing datasets
     train_data = dataset[:7000]
     test_data = dataset[7000:]
-    print(train_data[0:10], type(test_data))
+    # print(train_data[0:10], type(test_data))
 
     classifier = NaiveBayesClassifier.train(train_data) 
 
-    print("Accuracy is:", classify.accuracy(classifier, test_data))
+    print("Accuracy is:", classify.accuracy(classifier, test_data) * 100 ,'%')
 
     print(classifier.show_most_informative_features(10))
 
-    # custom_tweet = "I ordered just once from TerribleCo, they screwed up, never used the app again."
-    # # custom_comment = "Had a great time on Lauren's tour! She was very knowledgeable and fun to listen to!"
-    # custom_comment = "I liked Andrew's tour but he could have gone into more buildings. I think he was knowledgeable but didn't show excitement for NU"
+    return classifier
+print('Training model to identify constructive feedback...')
+# Calling trained model once - returns nltk Bayesian classifier object
+model = trainClassifier()
+# print('MODEL: ', model)
 
-    # custom_tokens = remove_noise(word_tokenize(custom_tweet))
+def classifyComment(comment, classifier):
+    '''Function to use trained classifier above and apply to comments pulled from guide data'''
+
     custom_comment_tokens = remove_noise(word_tokenize(comment)) # Tour sample comment
-    classification = classifier.classify(dict([token, True] for token in custom_comment_tokens))
+    classification = model.classify(dict([token, True] for token in custom_comment_tokens))
 
     # Returngin either positive of negative classification
     return classification
@@ -140,19 +144,32 @@ guideScore = feedback['Guide Score']
 routeScore = feedback['Route Score']
 
 names = feedback['Guide Name']
-# Testing with Lauren's comments
-guideData = feedback.loc[names == 'Emily Coffee']
+
+guideName = input('Please input guide\'s name: ')
+numComments = int(input('How many comments would you like to view? ')) # # of comments to display at end
+# Pulling guide name data
+guideData = feedback.loc[names == guideName]
 good_comments = []
 
+
+
 for comment in guideData['Comments']:
-	comment_type = classifyComment(comment)
+	comment_type = classifyComment(comment, model)
 	print(comment, '--Result--> ', comment_type)
 
 	# Grouping together positive comments
 	if comment_type == 'Positive':
 		good_comments.append(comment)
 
-print('Guide Feedback: ', good_comments[0:2])
+print('')
+print('####################################')
+print('')
+
+# Displaying a few good comments
+if numComments > len(guideData['Comments']):
+    numComments = len(guideData['Comments'])
+    print('There are fewer comments for that guide than you requested. Displaying what we can.')
+print('Guide Feedback: ', good_comments[0: numComments])
 
 
 # ## TODO: implement display of certain good comments

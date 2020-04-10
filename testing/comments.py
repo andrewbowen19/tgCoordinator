@@ -9,6 +9,9 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot
+
+import nltk # library for natural language processing
+
 # Reading in visitor feedback files (responses for every guide/tour)
 indpath = '/Users/andrewbowen/tgCoordinator/data/indFiles/'
 allpath = '/Users/andrewbowen/tgCoordinator/data/allFiles/'
@@ -26,10 +29,10 @@ routeScore = feedback['Route Score']
 names = feedback['Guide Name']
 
 # Color for plotting (NU hexcode)
-# purpleNU = '#4E2A84'
+purpleNU = '#4E2A84'
 
-# print(feedback['Comments'])
-
+# ##########################################################################################################
+# 								### OLD comment search fucntion ###
 
 def CommentSearch():
 	'''Function to call when comments are requested by user, can search for specific guide, 
@@ -60,7 +63,28 @@ def CommentSearch():
 		print('Ight Imma head out then')
 		pass
 
-xx = CommentSearch()
+# xx = CommentSearch()
+# ##########################################################################################################
+
+def CommentFilter(guideName, plots = True):
+	'''Function to test out nltk library for serching list of guide comments for positive ones'''
+	print('Searching visitor comments for: ', guideName)
+
+	guideData = feedback.loc[names == guideName]
+	comments = guideData['Comments']
+
+	print(comments)
+
+	# values
+	val = nltk.Valuation([('good', True), ('great', True), 
+			('Poor', False), ('poor', False), ('Bad', True)])
+
+	# classifier = nltk.NaiveBayesClassifier.train(train_set)
+	g = nltk.Assignment(comments)
+	m = nltk.Model(comments, val)
+
+CommentFilter('Lauren Gold', True)
+
 
 
 

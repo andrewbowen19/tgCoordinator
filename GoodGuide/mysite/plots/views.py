@@ -32,6 +32,7 @@ def plot(guide_name):
     return HttpResponse("You're viewing the plot! %guide_name." % guide_name)
 
 def login(request):
+    template = loader.get_template('registration/login.html')
     username = request.POST['username']
     password = request.POST['password']
     user = authenticate(request, username=username, password=password)

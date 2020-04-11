@@ -5,104 +5,190 @@
 # Author: Andrew Bowen
 # License: MIT License
 
-"""Code to filter for postivie feedback in 'comments', will integrate into our 'Search' class"""
-import numpy as np
+'''
+Script to test out nltk python package
+Want to incorporate sentiment analysis
+tutorial here: https://www.digitalocean.com/community/tutorials/how-to-perform-sentiment-analysis-in-python-3-using-the-natural-language-toolkit-nltk
+Rewriting this code as a class
+'''
+
+
+from nltk.stem.wordnet import WordNetLemmatizer
+from nltk.corpus import twitter_samples, stopwords
+from nltk.tag import pos_tag
+from nltk.tokenize import word_tokenize
+from nltk import FreqDist, classify, NaiveBayesClassifier
+
+import re, string, random
 import pandas as pd
-import matplotlib.pyplot
 
-import nltk # library for natural language processing
+class commentAnalyzer(object):
+    '''
+    Object to incorporate NLP into tour comment analysis
+    Want to only call classification model once, then use the model for guide comments
+    Currently using .JSON files 
+    '''
+    def __init__(self, guideName):
+        self.guideName = guideName
+        # self.comment = comment
+        self.model = None
 
-# Reading in visitor feedback files (responses for every guide/tour)
-indpath = '/Users/andrewbowen/tgCoordinator/data/indFiles/'
-allpath = '/Users/andrewbowen/tgCoordinator/data/allFiles/'
-feedback = pd.read_csv(allpath + 'Feedback_Form_Beta.csv', sep = ',', header = 0)
+    def remove_noise(self, tweet_tokens, stop_words = ()):
+        '''Method to remove noise (words that don't contribute to meaning) from text'''
+        self.cleaned_tokens = []
 
-# Renaming the columns for easier readability
-feedback.columns = ['Timestamp','Visitor Name', 'Visitor Email', 'Visitor Type', 'Visit Date', 'Guide Name',\
-			'Exp Score', 'Route Score', 'Guide Score', 'Comments']
+        for token, tag in pos_tag(tweet_tokens):
+            token = re.sub('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+#]|[!*\(\),]|'\
+                           '(?:%[0-9a-fA-F][0-9a-fA-F]))+','', token)
+            token = re.sub("(@[A-Za-z0-9_]+)","", token)
 
-# Scores for plotting later
-expScore = feedback['Exp Score']
-guideScore = feedback['Guide Score']
-routeScore = feedback['Route Score']
+            if tag.startswith("NN"):
+                pos = 'n'
+            elif tag.startswith('VB'):
+                pos = 'v'
+            else:
+                pos = 'a'
 
-names = feedback['Guide Name']
+            lemmatizer = WordNetLemmatizer()
+            token = lemmatizer.lemmatize(token, pos)
 
-# Color for plotting (NU hexcode)
-purpleNU = '#4E2A84'
+            if (len(token) > 0) and (token not in string.punctuation) and (token.lower() not in stop_words):
+                self.cleaned_tokens.append(token.lower())
+        return self.cleaned_tokens
 
-# ##########################################################################################################
-# 								### OLD comment search fucntion ###
+    
+    def get_all_words(self, cleaned_tokens_list):
+        '''
+        Method that gets words from cleaned tokens
+        '''
 
-def CommentSearch():
-	'''Function to call when comments are requested by user, can search for specific guide, 
-		will implement with tkinter code, may want to add filter regex function'''
-	guidename = input('Which guide would you like to see feedback for?: ') # Guide name to search for - will implement with tkinter interface
+        self.cleaned_tokens_list = cleaned_tokens_list
+        for tokens in self.cleaned_tokens_list:
+            for token in tokens:
+                yield token
 
-	# Rudimentary guide search
-	if guidename in list(names):
-		print('Found them!')
-		viewComs = input('Would you like to see visitor comments on this guide?[y/n]: ')
-		yesAnswers = ['yes', 'Yes', 'y', 'Y'] # List of possible 'acceptable 'yes' answers to inputs
+    def get_tweets_for_model(self, cleaned_tokens_list):
+        '''Method to pull cleaned (noise removed tweets to apply to Model'''
+        for tweet_tokens in cleaned_tokens_list:
+            yield dict([token, True] for token in tweet_tokens)
 
-		if viewComs in yesAnswers:
-			
-			selectedGuide = feedback.loc[names == guidename]
+    def trainClassifier(self):
+        '''Method to train model on classifying positive and negative comment'''
 
-			print('Comments for: ' + guidename)
-			print('##########################')
-			print('Visitor: ', selectedGuide['Visitor Name'] + ' ', 'Visit Date/Time: ', selectedGuide['Visit Date'])
-			print(selectedGuide['Comments'])
-			print('##########################')
+        # Positive and negative tweet lists
+        positive_tweets = twitter_samples.strings('positive_tweets.json')
+        negative_tweets = twitter_samples.strings('negative_tweets.json')
+        text = twitter_samples.strings('tweets.20150430-223406.json')
+        tweet_tokens = twitter_samples.tokenized('positive_tweets.json')#[0]
 
-		else:
-			print('Ard bet')
-			pass
-	# If answer 'no' or enter erroneous guide name
-	else:
-		print('Ight Imma head out then')
-		pass
+        stop_words = stopwords.words('english')
 
-# xx = CommentSearch()
-# ##########################################################################################################
+        positive_tweet_tokens = twitter_samples.tokenized('positive_tweets.json')
+        negative_tweet_tokens = twitter_samples.tokenized('negative_tweets.json')
+        # print('+/- tweets:  ', positive_tweet_tokens[0:10], negative_tweet_tokens[0:10])
 
-def CommentFilter(guideName, plots = True):
-	'''Function to test out nltk library for serching list of guide comments for positive ones'''
-	print('Searching visitor comments for: ', guideName)
+        self.positive_cleaned_tokens_list = []
+        self.negative_cleaned_tokens_list = []
 
-	guideData = feedback.loc[names == guideName]
-	comments = guideData['Comments']
+        # Creating positive and negative tokens for tweets with noise removed
+        for tokens in positive_tweet_tokens:
+            self.positive_cleaned_tokens_list.append(self.remove_noise(tokens, stop_words))
 
-	print(comments)
+        for tokens in negative_tweet_tokens:
+            self.negative_cleaned_tokens_list.append(self.remove_noise(tokens, stop_words))
 
-	# values
-	val = nltk.Valuation([('good', True), ('great', True), 
-			('Poor', False), ('poor', False), ('Bad', True)])
+        self.all_pos_words = self.get_all_words(self.positive_cleaned_tokens_list) # part of speech words
 
-	# classifier = nltk.NaiveBayesClassifier.train(train_set)
-	g = nltk.Assignment(comments)
-	m = nltk.Model(comments, val)
+        freq_dist_pos = FreqDist(self.all_pos_words)
+        # print(freq_dist_pos.most_common(10))
 
-CommentFilter('Lauren Gold', True)
+        positive_tokens_for_model = self.get_tweets_for_model(self.positive_cleaned_tokens_list)
+        negative_tokens_for_model = self.get_tweets_for_model(self.negative_cleaned_tokens_list)
+
+        # Establishing positive and negative datasets from tokens
+        positive_dataset = [(tweet_dict, "Positive")
+                             for tweet_dict in positive_tokens_for_model]
+
+        negative_dataset = [(tweet_dict, "Negative")
+                             for tweet_dict in negative_tokens_for_model]
+
+        # Creating randomized dataset
+        self.dataset = positive_dataset + negative_dataset
+        random.shuffle(self.dataset)
+
+        # Establishing training and testing datasets
+        train_data = self.dataset[:7000]
+        test_data = self.dataset[7000:]
+        # print(train_data[0:10], type(test_data))
+
+        self.classifier = NaiveBayesClassifier.train(train_data) 
+
+        print("Accuracy is:", classify.accuracy(self.classifier, test_data) * 100 ,'%')
+
+        print(self.classifier.show_most_informative_features(10))
+
+        return self.classifier
+
+    # def establishModel(self):
+    #     print('Training model to identify constructive feedback...')
+    #     # Calling trained model once - returns nltk Bayesian classifier object
+    #     self.model = self.trainClassifier()
+    #     # return self.model
 
 
+    def classifyComment(self, comment, classifier):
+        '''Method to use trained classifier above and apply to comments pulled from guide data'''
+        self.comment = comment
+        custom_comment_tokens = self.remove_noise(word_tokenize(self.comment)) # Tour sample comment
+        self.model = self.trainClassifier()
+        self.classification = self.model.classify(dict([token, True] for token in custom_comment_tokens))
+
+        # Returngin either positive of negative classification
+        return self.classification
+
+    def displayComments(self, guideName):
+
+        # Reading in visitor feedback files (responses for every guide/tour)
+        allpath = '/Users/andrewbowen/tgCoordinator/data/allFiles/'
+        self.feedback = pd.read_csv(allpath + 'Feedback_Form_Beta.csv', sep = ',', header = 0)
+
+        # Renaming the columns for easier readability
+        self.feedback.columns = ['Timestamp','Visitor Name', 'Visitor Email', 'Visitor Type', 'Visit Date', 'Guide Name',\
+                    'Exp Score', 'Route Score', 'Guide Score', 'Comments']
+
+        self.names = self.feedback['Guide Name']
+
+        numComments = 2 # int(input('How many comments would you like to view? ')) # # of comments to display at end
+        # Pulling guide name data
+        self.guideData = self.feedback.loc[self.names == self.guideName]
+        good_comments = []
+
+        # ca = commentAnalyzer(guideName)
+
+        for comment in self.guideData['Comments']:
+            comment_type = self.classifyComment(comment, self.model)
+            print(comment, '--Result--> ', comment_type)
+
+            # Grouping together positive comments
+            if comment_type == 'Positive':
+                good_comments.append(comment)
+
+        print('')
+        print('####################################')
+        print('')
+
+        # Displaying a few good comments
+        if numComments > len(self.guideData['Comments']):
+            numComments = len(self.guideData['Comments'])
+            print('There are fewer comments for that guide than you requested. Displaying what we can.')
+        print('Guide Feedback: ', good_comments[0: numComments])
 
 
+# ## TODO: testing and integration of this object into our django app
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# Test calling object above
+ca = commentAnalyzer('Andrew Bowen')
+ca.displayComments('Andrew Bowen')
 
 
 

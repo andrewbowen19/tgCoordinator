@@ -14,6 +14,8 @@ import numpy as np
 import pandas as pd
 import matplotlib.cm as cm
 
+import plotly
+
 
 class GuidePlots(object):
 	'''
@@ -24,7 +26,7 @@ class GuidePlots(object):
 	def __init__(self, guideName):
 		self.guideName = guideName
 
-	def scatterPlot(self, guideName, x_scores, y_scores, xlabel, ylabel, best_fit = False, saveFig = True):
+	def scatterPlot(self, guideName, x_scores, y_scores, xlabel, ylabel, best_fit=False, saveFig=True):
 		'''
 		Method to create scatter plots to see correlations between two scores for a guide
 		Not very useful if our scores are discrete values - 2d histogram method would be better
@@ -67,7 +69,6 @@ class GuidePlots(object):
 		Both x and y scores need to be array-like to plot correctly
 		'''
 
-
 		self.guideName = guideName
 
 		# creating figure
@@ -80,11 +81,14 @@ class GuidePlots(object):
 		cbar = f.colorbar(im)
 		cbar.ax.set_ylabel(r'# Scores', rotation=270, labelpad=8)
 
+
 	# Elam's time-series code here
 	# def timeSeriesScatter(params):
 		# Make time series scatter
 
 
-
+## TODO: 
+# 	-include maybe corner-plotting script?
+# 	-think of different visualization techniques we could use
 
 

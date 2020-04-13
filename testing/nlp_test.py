@@ -6,8 +6,9 @@
 # License: MIT License
 
 '''
-Script to test out nltk python package
-Want to incorporate sentiment analysis
+Script to use for processing guide comments
+Will act as a filter for positive vs negative comments
+Can use for goodGuide, allow guides to only view constructive feedback
 tutorial here: https://www.digitalocean.com/community/tutorials/how-to-perform-sentiment-analysis-in-python-3-using-the-natural-language-toolkit-nltk
 '''
 
@@ -24,8 +25,8 @@ import pandas as pd
 def remove_noise(tweet_tokens, stop_words = ()):
     '''
     Function to remove noise (words that don't contribute to meaning) from text
-
     '''
+
     cleaned_tokens = []
 
     for token, tag in pos_tag(tweet_tokens):
@@ -174,12 +175,6 @@ print('Guide Feedback: ', good_comments[0: numComments])
 
 # ## TODO: implement display of certain good comments
 
-# Pseudo code:
-# if comment_type = 'Postive':
-# 	append to postive comment list
-# 	show positive comment list (1-3 examples)
-
-# 	Could ask user if they would like to see comments about something specifically
 
 
 

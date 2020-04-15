@@ -11,6 +11,8 @@ Want to incorporate sentiment analysis
 tutorial here:
 https://www.digitalocean.com/community/tutorials/how-to-perform-sentiment-analysis-in-python-3-using-the-natural-language-toolkit-nltk
 Rewriting this code as a class
+
+for our demo with the project team
 '''
 
 import re
@@ -26,7 +28,7 @@ from nltk import FreqDist
 from nltk import classify
 from nltk import NaiveBayesClassifier
 
-class commentAnalyzer(object):
+class demoAnalyzer(object):
     '''
     Object to incorporate NLP into tour comment analysis
     Want to only call classifier once for training
@@ -35,9 +37,9 @@ class commentAnalyzer(object):
     Will want to rewrite guide comments to this format
     '''
 
-    def __init__(self, guideName):
+    def __init__(self, guideName, comments):
         self.guideName = guideName
-        # self.comment = comment
+        self.comments = comments
         self.model = None
 
     def remove_noise(self, tweet_tokens, stop_words=()):
@@ -139,15 +141,20 @@ class commentAnalyzer(object):
         accuracy = classify.accuracy(self.classifier, test_data)
         print("Accuracy is:", accuracy * 100, '%')
 
-        print(self.classifier.show_most_informative_features(10))
+        print(type(self.classifier.show_most_informative_features(10)))
 
         return self.classifier
 
-    # def establishModel(self):
-    #     print('Training model to identify constructive feedback...')
-    #     # Calling trained model once - returns nltk Bayes classifier object
-    #     self.model = self.trainClassifier()
-    #     # return self.model
+    def establishModel(self):
+        '''
+        Method to be called once to train the model
+        Will then use the model based off one training
+        '''
+        print('Establishing model to identify constructive feedback...')
+
+        # Calling trained model once - returns nltk Bayes classifier object
+        self.model = self.trainClassifier()
+
 
 
     def classifyComment(self, comment, classifier):
@@ -160,56 +167,70 @@ class commentAnalyzer(object):
         custom_comment_tokens = self.remove_noise(word_tokenize(self.comment))  # Tour sample comment
 
         # Might not want to train for every comment
-        self.model = self.trainClassifier()
+        # self.model = self.trainClassifier()
 
         print('Creating comment classification...')
         self.classification = self.model.classify(dict([token, True]
                                                        for token in custom_comment_tokens))
 
-        # Returngin either positive of negative classification
+        # Returning either positive of negative classification
         return self.classification
 
-    def displayComments(self, guideName):
+    def displayComments(self, guideName, comments, num):
+        '''
+        Method to display results of our model
+        comments should be some sequence of comments
+        will do this for any input of comments
+        '''
 
-        # Reading in visitor feedback files (responses for every guide/tour)
-        allpath = '/Users/andrewbowen/tgCoordinator/data/allFiles/'
-        self.feedback = pd.read_csv(allpath + 'Feedback_Form_Beta.csv', sep=',', header=0)
+        numComments = int(num)  # # of comments to display
 
-        # Renaming the columns for easier readability
-        self.feedback.columns = ['Timestamp', 'Visitor Name', 'Visitor Email',
-                                 'Visitor Type', 'Visit Date', 'Guide Name',
-                                 'Exp Score', 'Route Score', 'Guide Score', 'Comments']
+        # List of positive comments to display later
+        self.good_comments = []
+        self.comments = comments
 
-        self.names = self.feedback['Guide Name']
-
-        numComments = 3  # # of comments to display
-        # Pulling guide name data
-        self.guideData = self.feedback.loc[self.names == self.guideName]
-        good_comments = []
-
-        # ca = commentAnalyzer(guideName)
-
-        for comment in self.guideData['Comments']:
-            comment_type = self.classifyComment(comment, self.model)
-            print(comment, '--Result--> ', comment_type)
+        for c in self.comments:
+            comment_type = self.classifyComment(c, self.model)
+            print(c, '--Result--> ', comment_type, '\n')
+            # print('')
 
             # Grouping together positive comments
             if comment_type == 'Positive':
-                good_comments.append(comment)
+                self.good_comments.append(c)
 
         print('')
         print('####################################')
         print('')
 
         # Displaying a few good comments
-        if numComments > len(self.guideData['Comments']):
-            numComments = len(self.guideData['Comments'])
+        if numComments > len(comments):
+            numComments = len(comments)
             print('There are fewer comments than you requested.')
-        print('Guide Feedback: ', good_comments[0: numComments])
+        print('Guide Feedback: ', self.good_comments[0: numComments])
 
 
 # ## TODO: testing and integration of this object into our django app
 
-# Test calling object above
-#ca = commentAnalyzer('Andrew Bowen')
-#ca.displayComments('Andrew Bowen')
+
+# Reading in visitor feedback files (responses for every guide/tour)
+# allpath = '/Users/andrewbowen/tgCoordinator/data/allFiles/'
+# feedback = pd.read_csv(allpath + 'Feedback_Form_Beta.csv', sep=',', header=0)
+
+# # Renaming the columns for easier readability
+# feedback.columns = ['Timestamp', 'Visitor Name', 'Visitor Email',
+#                          'Visitor Type', 'Visit Date', 'Guide Name',
+#                          'Exp Score', 'Route Score', 'Guide Score', 'Comments']
+
+# names = feedback['Guide Name']
+# guideName = input('Enter Guide Name: ')
+# # Pulling guide name data
+# guideData = feedback.loc[names == guideName]
+
+# n = input('How many comments would you like to view? ')
+
+# # comments = ['without a doubt, the lakefront views and the relaxed feeling from the tour guide\n', 'It was very informative and welcoming.\n', 'Great tour guide, awesome campus\n', "The tour guides really knew what they were talking about, and Skylar was really funny and personable. All the presenters I've seen at other schools weren't as fun as he was.\n", 'The guide actually allowed us into a classroom and let us have a dedicated question session, and the guide seemed much more genuine than the rest of my tour guides, especially in explaining why they chose Northwestern.\n', 'Once again I think the tour guides were not only extremely informative, but also shared with us their personal experiences, which gave us a different perspective of the school. Overall, great tour!\n', "My tour guide (I don't remember his name but he is a political science, history, and legal studies student from Colorado) was awesome  he took the time to answer everyone's specific questions and made me fall in love with the campus and community. He showed that he cares about the school and that he is proud to go there. This tour solidified Northwestern's place as my first-choice school.\n", "I feel Northwestern's tour made sure to create a welcoming, yet realistic view of the environment Northwestern holds.\n", 'I liked that the tour guide was very focused on personalizing the tour and answering all the questions asked. She did her best to keep the group engaged and I really liked how she spoke a lot about the different traditions around campus because I feel like a schools traditions is really one major thing that sets it apart from other schools for me. I also enjoyed how we got to spend times inside and out of buildings because I have felt that in many other tours I have been only shown the facade of different academic buildings, but on my tour at Northwestern I was shown the inside of various academic centers and I even got to see the commons and a typical classroom!\n', "The Northwestern tour stood out because of the tour's ability to allow the visitors to get a real taste of what going to Northwestern is really like! For example, we sat in a Northwestern classroom for part of the tour, which allowed me to think about my life if I were to attend this university.\n", 'We had a wonderful tour guide who had a ton of energy and enthusiasm. She was super encouraging and more than willing to answer any and all questions. Overall the visit was a fantastic experience!\n', "For most part showed nice overview of everything. However, didn't show dorms which was dissapointing\n","Nothing stands out, the tour guides were not great speakers. Perhaps better speech presenters are needed or study the skill in order to present the school at it's best. As a HS speech analyst, I'd say it was very hard to listen to them speak. They were over the top and almost silly.\n", 'It focused more on the arts than most other schools (likely because it has a bigger presence at your school than most). However, I wish we would have been shown more of the campus (we were only shown the southern third of campus). I also wish we were shown more of the academic buildings and were able to see inside.\n']
+
+# # Test calling object above
+# ca = demoAnalyzer(guideName, guideData['Comments']) #, comments)
+# ca.establishModel()
+# ca.displayComments(guideName, guideData['Comments'], n) #, comments)

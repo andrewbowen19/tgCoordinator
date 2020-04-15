@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 
 from . import views
 from django.contrib.auth import authenticate, login
@@ -8,7 +8,6 @@ from django.contrib import admin
 from django.contrib.auth import views as auth_views
 
 urlpatterns = [
-    path('accounts/login/', auth_views.LoginView.as_view(template_name='plots/login.html')),
     # index should be main user page - where guides can access their results
     path('', views.index, name='index'),
     # ex: /polls/5/
@@ -17,7 +16,8 @@ urlpatterns = [
     path('<int:question_id>/results/', views.results, name='results'),
     # ex: /polls/5/vote/
     path('<int:question_id>/plot/', views.plot, name='plot'),
-    
+    path('accounts/login/', auth_views.LoginView.as_view(template_name='templates/registration/login.html')),
+
 ]
 
 

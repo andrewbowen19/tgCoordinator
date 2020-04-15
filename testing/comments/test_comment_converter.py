@@ -29,29 +29,38 @@ with open(csvFilePath, errors='ignore') as csvFile:
 		print(row)
 
 		# Classifying comments by hand
-		classification_by_hand = input('Positive or negative?[p/n]: ')
+		classification_by_hand = input('Positive or negative?: ')
 		if 'p' in classification_by_hand or 'P' in classification_by_hand:
-			positive_comments.append(row[0])
+			positive_comments.append(str(row[0] + '\n'))
+			print('')
 
-		if 'n' in classification_by_hand or 'N' in classification_by_hand:
-			negative_comments.append(row[0])
+		elif 'n' in classification_by_hand or 'N' in classification_by_hand:
+			negative_comments.append(str(row[0] + '\n'))
+			print('')
 
-		if 'foo' in classification_by_hand:
+		elif 'foo' in classification_by_hand:
+			print('')
 			break
 
 
-print(positive_comments)
+print('Positivie Comments: ', positive_comments)
+print('Negative Comments: ', negative_comments)
 # print(data)
 
-with open('positive-comments.txt', 'w') as f:
-	for c in positive_comments:
-		f.write(c)
+# with open('positive-comments.txt', 'w') as f:
+f = open('positive-comments.txt', 'w')
+f.writelines(positive_comments)
+f.close()
 
+# with open('positive-comments.txt', 'w') as f:
+# 	# for c in negative_comments:
+# 	# 	f.write(c + '\n')
+# 	f.writelines(negative_comments)
 
-with open('positive-comments.txt', 'w') as f:
-	for c in negative_comments:
-		f.write(c)
-
+f = open('negative-comments.txt', 'w')
+f.writelines(negative_comments)
+f.close()
+# f.close()
 
 
 

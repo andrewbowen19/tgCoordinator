@@ -148,7 +148,7 @@ class commentAnalyzer(object):
     #     # Calling trained model once - returns nltk Bayes classifier object
     #     self.model = self.trainClassifier()
     #     # return self.model
-    
+
 
     def classifyComment(self, comment, classifier):
         '''
@@ -182,7 +182,7 @@ class commentAnalyzer(object):
 
         self.names = self.feedback['Guide Name']
 
-        numComments = 2  # # of comments to display
+        numComments = 3  # # of comments to display
         # Pulling guide name data
         self.guideData = self.feedback.loc[self.names == self.guideName]
         good_comments = []
@@ -211,5 +211,5 @@ class commentAnalyzer(object):
 # ## TODO: testing and integration of this object into our django app
 
 # Test calling object above
-ca = commentAnalyzer('Lauren Gold')
-ca.displayComments('Andrew Bowen')
+# ca = commentAnalyzer('Lauren Gold')
+# ca.displayComments('Andrew Bowen')

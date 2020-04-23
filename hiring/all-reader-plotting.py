@@ -58,14 +58,12 @@ def readerPlots(Reader):
 	ax.set_xlabel('Appropriate')
 	f.savefig(f'./scorers/{dirName}/plots/{dirName}-Appropriate-hist.pdf')
 
-
 	# Histograms: Originality scores
 	f,ax = plt.subplots()
 	ax.hist(reader['Originality'], range = (0,5), bins = 5)
 	ax.set_title(Reader)
 	ax.set_xlabel('Originality')
 	f.savefig(f'./scorers/{dirName}/plots/{dirName}-Originality-hist.pdf')
-
 
 	# Histograms - Campus Awareness
 	f,ax = plt.subplots()
@@ -209,8 +207,8 @@ f.savefig(f'./plots/All-AppOrg-hist2d.pdf')
 f,ax = plt.subplots()
 h2d, x2D, y2D, im = ax.hist2d(all_stats['App mean'], all_stats['CA mean'], bins = [Nx, Ny],
 	 range = [[xmin, xmax],[ymin, ymax]], cmap = cm.Blues)
-ax.set_xlabel('App mean')
-ax.set_ylabel('Campus Awareness mean')
+ax.set_xlabel('Appropriate Scores mean')
+ax.set_ylabel('Campus Awareness Scores mean')
 ax.set_title('All Readers')
 cbar = f.colorbar(im, ax = ax)
 cbar.ax.set_ylabel('N Scores', rotation = 270, labelpad = 8)
@@ -220,8 +218,8 @@ f.savefig(f'./plots/All-AppCA-hist2d.pdf')
 f,ax = plt.subplots()
 h2d, x2D, y2D, im = ax.hist2d(all_stats['Org mean'], all_stats['CA mean'], bins = [Nx, Ny],
 	 range = [[xmin, xmax],[ymin, ymax]], cmap = cm.Blues)
-ax.set_xlabel('Originality mean')
-ax.set_ylabel('Campus Awareness mean')
+ax.set_xlabel('Originality Scores mean')
+ax.set_ylabel('Campus Awareness Scores mean')
 ax.set_title('All Readers')
 cbar = f.colorbar(im, ax = ax)
 cbar.ax.set_ylabel('N Scores', rotation = 270, labelpad = 8)
@@ -239,28 +237,26 @@ f.savefig('./plots/hist1D-categories.pdf')
 # Scater plots - Appropriate-Originality
 f,ax = plt.subplots()
 ax.scatter(all_stats['App mean'], all_stats['Org mean'])
-ax.set_xlabel('Appropriate')
-ax.set_ylabel('Originality')
+ax.set_xlabel('Appropriate Scores')
+ax.set_ylabel('Originality Scores')
 ax.set_title('All readers')
 f.savefig('./plots/AppOrg-scatter.pdf')
 
 # scatter Appropriate - Campus Awareness
 f,ax = plt.subplots()
 ax.scatter(all_stats['App mean'], all_stats['CA mean'])
-ax.set_xlabel('Appropriate')
-ax.set_ylabel('Campus Awareness')
+ax.set_xlabel('Appropriate Scores')
+ax.set_ylabel('Campus Awareness Scores')
 ax.set_title('All readers')
 f.savefig('./plots/AppCA-scatter.pdf')
 
 # Scatter Originality - Campus Awareness
 f,ax = plt.subplots()
 ax.scatter(all_stats['Org mean'], all_stats['CA mean'])
-ax.set_xlabel('Originality')
-ax.set_ylabel('Campus Awareness')
+ax.set_xlabel('Originality Scores')
+ax.set_ylabel('Campus Awareness Scores')
 ax.set_title('All readers')
 f.savefig('./plots/OrgCA-scatter.pdf')
-
-
 
 #Could incluse ind scatter plots to show all scores for an ind reader
 

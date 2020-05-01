@@ -15,9 +15,8 @@ urlpatterns = [
     # ex: /polls/5/results/
     path('<int:question_id>/results/', views.results, name='results'),
     # ex: /polls/5/vote/
-    path('<int:question_id>/plot/', views.plot, name='plot'),
     path('accounts/login/', auth_views.LoginView.as_view(template_name='templates/registration/login.html')),
-
+    path('plot/', views.plot, name='plot')
 ]
 
 

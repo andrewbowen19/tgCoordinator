@@ -4,7 +4,8 @@ from .models import Question, Guide, Visitor
 
 from django.template import loader
 from django.contrib.auth import authenticate, login
-
+import matplotlib.pyplot as plt
+import numpy as np
 # Create your views here.
 def index(request):
     guide_name = Guide.objects
@@ -28,8 +29,17 @@ def results(request, question_id):
     response = "You're looking at the plot called %s."
     return HttpResponse(response % question_id)
 
-def plot(guide_name):
-    return HttpResponse("You're viewing the plot! %guide_name." % guide_name)
+def plot(request):
+    # Need to include interactive plotting code here
+    guide_name = Guide.objects
+
+    template = loader.get_template('plots/plot.html')
+    context = {
+        'guide_name': guide_name,
+
+    }
+
+    return HttpResponse(template.render(context, request))
 
 def login(request):
     template = loader.get_template('registration/login.html')
